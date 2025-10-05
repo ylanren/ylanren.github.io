@@ -238,7 +238,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2025/10/05/%E7%A6%BB%E6%95%A3%E6%97%B6%E9%97%B4%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%88%86%E7%B1%BB/" target="_blank">离散时间系统的分类</a>
+	  <a class="article-title" href="/2025/10/05/%E7%A6%BB%E6%95%A3%E6%97%B6%E9%97%B4%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%88%86%E7%B1%BB/" target="_blank">离散时间系统的分类与数学描述</a>
   
     </h1>
   
@@ -247,7 +247,7 @@
   
   
 <a href="/2025/10/05/%E7%A6%BB%E6%95%A3%E6%97%B6%E9%97%B4%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%88%86%E7%B1%BB/" class="archive-article-date">
-        <time datetime="2025-10-05T12:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-10-05</time>
+        <time datetime="2025-10-05T13:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-10-05</time>
 </a>
 
   
@@ -259,176 +259,133 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="离散时间系统的分类-学习记录">离散时间系统的分类 —— 学习记录</h1>
-<h2 id="一概述">一、概述</h2>
-<p>离散时间系统（Discrete-Time
-Systems）是指<strong>系统的输入与输出信号都是离散时间信号</strong>的系统。这类系统在数字信号处理（DSP）、自动控制、通信系统、图像处理等领域中具有广泛应用。</p>
-<p>与连续时间系统相对，离散时间系统的信号只在<strong>离散的时间点</strong>上有定义，通常用序列表示，如
-( x[n] )、( y[n] )，其中 ( n ) 为整数，表示时间序号。</p>
-<p>本学习记录主要梳理<strong>离散时间系统的主要分类方式及其特点</strong>，包括线性与非线性、时变与时不变、因果与非因果、稳定与不稳定等。</p>
-<hr />
-<h2 id="二离散时间系统的常见分类">二、离散时间系统的常见分类</h2>
-<h3 id="线性系统-与非线性系统linear-nonlinear">1. 线性系统
-与非线性系统（Linear / Nonlinear）</h3>
-<h4 id="线性系统">✅ 线性系统：</h4>
-<p>满足以下两个性质：</p>
+    <h1 id="离散时间系统的分类与数学描述"><a href="#离散时间系统的分类与数学描述" class="headerlink" title="离散时间系统的分类与数学描述"></a>离散时间系统的分类与数学描述</h1><h2 id="一、🔍-什么是离散时间系统？"><a href="#一、🔍-什么是离散时间系统？" class="headerlink" title="一、🔍 什么是离散时间系统？"></a>一、🔍 什么是离散时间系统？</h2><p>离散时间系统（<strong>Discrete-Time System</strong>）是指<strong>系统的输入信号 $x[n]$ 和输出信号 $y[n]$ 都是定义在离散时间点上的信号</strong>，通常时间序号 $n \in \mathbb{Z}$（整数集合）。</p>
+<p>这类系统广泛用于：</p>
 <ul>
-<li><p><strong>叠加性（可加性）</strong>：<br />
-若 ( y_1[n] = T{x_1[n]} )，( y_2[n] = T{x_2[n]} )，则<br />
-( T{x_1[n] + x_2[n]} = y_1[n] + y_2[n] )</p></li>
-<li><p><strong>齐次性（比例性）</strong>：<br />
-若 ( y[n] = T{x[n]} )，则对于任意常数 ( a )，有<br />
-( T{a x[n]} = a y[n] )</p></li>
+<li>数字信号处理（DSP）</li>
+<li>自动控制</li>
+<li>通信系统</li>
+<li>图像与语音处理</li>
 </ul>
-<p>👉 综合起来，线性系统满足：<br />
-<strong>( T{a x_1[n] + b x_2[n]} = a T{x_1[n]} + b T{x_2[n]}
-)</strong></p>
-<h4 id="非线性系统">❌ 非线性系统：</h4>
-<p>不满足上述任一性质，例如包含乘积项 ( x^2[n]
-)、三角函数、绝对值等非线性运算的系统。</p>
-<hr />
-<h3 id="时不变系统-与时变系统time-invariant-time-varying">2. 时不变系统
-与时变系统（Time-Invariant / Time-Varying）</h3>
-<h4 id="时不变系统">✅ 时不变系统：</h4>
-<p>系统的行为不随时间改变。即：输入信号的时移导致输出信号相应的时移，系统特性不变。</p>
-<p>数学表达：<br />
-若 ( y[n] = T{x[n]} )，则<br />
-( y[n - n_0] = T{x[n - n_0]} ) 对任意 ( n_0 ) 成立。</p>
-<p>👉 直观理解：系统的“规则”不随时间变化。</p>
-<h4 id="时变系统">❌ 时变系统：</h4>
-<p>系统的特性随时间变化，输入的时移不一定导致输出的相应时移。</p>
-<hr />
-<h3 id="因果系统-与非因果系统causal-non-causal">3. 因果系统
-与非因果系统（Causal / Non-causal）</h3>
-<h4 id="因果系统">✅ 因果系统：</h4>
-<p>系统的<strong>输出只依赖于当前时刻及过去时刻的输入</strong>，不依赖于未来的输入。</p>
-<p>数学上：对于所有 ( n )，输出 ( y[n] ) 仅依赖于 ( x[k],  k n )。</p>
-<p>👉
-因果系统是可以<strong>实时实现</strong>的，大多数物理系统是因果的。</p>
-<h4 id="非因果系统">❌ 非因果系统：</h4>
-<p>输出依赖于未来时刻的输入，例如 ( y[n] = x[n+1]
-)。这类系统无法实时实现，常用于离线处理或理想分析中。</p>
-<hr />
-<h3 id="稳定系统-与不稳定系统stable-unstable">4. 稳定系统
-与不稳定系统（Stable / Unstable）</h3>
-<p>通常采用 <strong>BIBO 稳定性（有界输入有界输出）</strong>
-来判断：</p>
-<h4 id="稳定系统bibo-stable">✅ 稳定系统（BIBO Stable）：</h4>
-<p>如果输入 ( x[n] ) 是有界的（即 ( |x[n]| M &lt; )），那么输出 ( y[n] )
-也是有界的（即 ( |y[n]| K &lt; )）。</p>
-<h4 id="不稳定系统">❌ 不稳定系统：</h4>
-<p>存在有界输入，但输出无界。</p>
-<p>👉 稳定性是系统能否实际应用的重要指标。</p>
-<hr />
-<h3
-id="静态系统-与-动态系统static-dynamic有时也称为-memoryless-with-memory">5.
-静态系统 与 动态系统（Static / Dynamic，有时也称为 Memoryless / With
-Memory）</h3>
-<h4 id="静态系统或无记忆系统memoryless">✅
-静态系统（或无记忆系统，Memoryless）：</h4>
-<p>当前输出仅依赖于<strong>当前输入</strong>，与历史输入无关。<br />
-例如：( y[n] = a x[n] )</p>
-<h4 id="动态系统或有记忆系统">❌ 动态系统（或有记忆系统）：</h4>
-<p>当前输出依赖于<strong>当前及/或过去输入</strong>。<br />
-例如：( y[n] = x[n] + x[n-1] )</p>
+<p>与<strong>连续时间系统</strong>（信号定义在连续时间 $t \in \mathbb{R}$ 上）不同，离散时间系统通常用<strong>序列</strong>和<strong>差分方程</strong>来描述。</p>
+<hr>
+<h2 id="二、📐-离散时间系统的数学表示"><a href="#二、📐-离散时间系统的数学表示" class="headerlink" title="二、📐 离散时间系统的数学表示"></a>二、📐 离散时间系统的数学表示</h2><h3 id="1-输入与输出关系"><a href="#1-输入与输出关系" class="headerlink" title="1. 输入与输出关系"></a>1. 输入与输出关系</h3><p>一个离散时间系统可由输入序列 $x[n]$ 和输出序列 $y[n]$ 之间的关系来描述，通常写为：</p>
+<p>$$<br>y[n] &#x3D; T\big{ x[n] \big}<br>$$</p>
+<p>其中 $T{\cdot}$ 表示系统的<strong>变换或操作</strong>，可以是线性或非线性的。</p>
+<hr>
+<h2 id="三、🔢-离散时间系统的常见分类（含数学描述）"><a href="#三、🔢-离散时间系统的常见分类（含数学描述）" class="headerlink" title="三、🔢 离散时间系统的常见分类（含数学描述）"></a>三、🔢 离散时间系统的常见分类（含数学描述）</h2><p>我们仍然从以下几个经典维度对离散时间系统进行分类，但这次加入数学表达式与希腊字母（如 $\alpha, \beta, n_0$ 等）以增强技术性。</p>
+<hr>
+<h3 id="1-线性系统-与非线性系统（Linear-Nonlinear）"><a href="#1-线性系统-与非线性系统（Linear-Nonlinear）" class="headerlink" title="1. 线性系统 与非线性系统（Linear &#x2F; Nonlinear）"></a>1. 线性系统 与非线性系统（Linear &#x2F; Nonlinear）</h3><h4 id="✅-线性系统满足："><a href="#✅-线性系统满足：" class="headerlink" title="✅ 线性系统满足："></a>✅ 线性系统满足：</h4><ul>
+<li><strong>叠加性（可加性）</strong> 与 <strong>齐次性（比例性）</strong></li>
+</ul>
+<p>若：<br>$$<br>y_1[n] &#x3D; T{x_1[n]}, \quad y_2[n] &#x3D; T{x_2[n]}<br>$$</p>
+<p>则：<br>$$<br>T{a x_1[n] + b x_2[n]} &#x3D; a y_1[n] + b y_2[n]<br>$$</p>
+<p>其中 $a, b \in \mathbb{R}$（或 $\mathbb{C}$）为任意常数。</p>
 <blockquote>
-<p>注：有些文献将此分类单独列出，有时与因果性相关联但不完全等同。</p>
+<p>📌 常见线性系统举例：<br>$$<br>y[n] &#x3D; \alpha x[n] + \beta<br>$$<br>其中 $\alpha, \beta$ 为常数，且不依赖于 $n$ 或历史输入。</p>
 </blockquote>
-<hr />
-<h2 id="三分类的组合与系统综合判断">三、分类的组合与系统综合判断</h2>
-<p>在实际系统中，上述分类维度往往是<strong>组合出现</strong>的。例如：</p>
-<ul>
-<li><p><strong>线性时不变系统（LTI, Linear
-Time-Invariant）</strong>：是最常见、最基础、也最易分析的一类离散时间系统。其特性包括卷积和、单位脉冲响应、传递函数等工具都可以应用。</p></li>
-<li><p><strong>非线性时变系统</strong>：分析复杂，通常需要数值方法或仿真手段。</p></li>
+<h4 id="❌-非线性系统举例："><a href="#❌-非线性系统举例：" class="headerlink" title="❌ 非线性系统举例："></a>❌ 非线性系统举例：</h4><p>$$<br>y[n] &#x3D; x[n]^2, \quad y[n] &#x3D; \sin(x[n]), \quad y[n] &#x3D; x[n] \cdot x[n-1]<br>$$</p>
+<hr>
+<h3 id="2-时不变系统-与时变系统（Time-Invariant-Time-Varying）"><a href="#2-时不变系统-与时变系统（Time-Invariant-Time-Varying）" class="headerlink" title="2. 时不变系统 与时变系统（Time-Invariant &#x2F; Time-Varying）"></a>2. 时不变系统 与时变系统（Time-Invariant &#x2F; Time-Varying）</h3><h4 id="✅-时不变系统："><a href="#✅-时不变系统：" class="headerlink" title="✅ 时不变系统："></a>✅ 时不变系统：</h4><p>若：<br>$$<br>y[n] &#x3D; T{x[n]}<br>$$</p>
+<p>则对于任意整数时移 $n_0$，有：<br>$$<br>y[n - n_0] &#x3D; T{x[n - n_0]}<br>$$</p>
+<blockquote>
+<p>📌 即：系统特性不随时间变化，输入延时导致输出等量延时。</p>
+</blockquote>
+<h4 id="❌-时变系统举例："><a href="#❌-时变系统举例：" class="headerlink" title="❌ 时变系统举例："></a>❌ 时变系统举例：</h4><p>$$<br>y[n] &#x3D; n \cdot x[n]<br>$$<br>这里系统增益 $n$ 依赖于当前时刻，因此是时变的。</p>
+<hr>
+<h3 id="3-因果系统-与非因果系统（Causal-Non-Causal）"><a href="#3-因果系统-与非因果系统（Causal-Non-Causal）" class="headerlink" title="3. 因果系统 与非因果系统（Causal &#x2F; Non-Causal）"></a>3. 因果系统 与非因果系统（Causal &#x2F; Non-Causal）</h3><h4 id="✅-因果系统："><a href="#✅-因果系统：" class="headerlink" title="✅ 因果系统："></a>✅ 因果系统：</h4><p>输出 $y[n]$ <strong>只依赖于当前及&#x2F;或过去输入</strong>，即：<br>$$<br>y[n] &#x3D; f\big(x[n], x[n-1], x[n-2], \dots \big)<br>$$</p>
+<blockquote>
+<p>✅ 因果系统可以实现实时处理。</p>
+</blockquote>
+<h4 id="❌-非因果系统举例："><a href="#❌-非因果系统举例：" class="headerlink" title="❌ 非因果系统举例："></a>❌ 非因果系统举例：</h4><p>$$<br>y[n] &#x3D; x[n+1], \quad y[n] &#x3D; x[n+2] + x[n]<br>$$<br>输出依赖于未来的输入，无法实时实现（常用于离线处理）。</p>
+<hr>
+<h3 id="4-稳定系统-与-不稳定系统（Stable-Unstable）"><a href="#4-稳定系统-与-不稳定系统（Stable-Unstable）" class="headerlink" title="4. 稳定系统 与 不稳定系统（Stable &#x2F; Unstable）"></a>4. 稳定系统 与 不稳定系统（Stable &#x2F; Unstable）</h3><p>采用 **BIBO 稳定性（有界输入有界输出）**标准：</p>
+<h4 id="✅-稳定系统："><a href="#✅-稳定系统：" class="headerlink" title="✅ 稳定系统："></a>✅ 稳定系统：</h4><p>如果输入 $x[n]$ 满足：<br>$$<br>|x[n]| \leq M &lt; \infty, \quad \forall n<br>$$<br>则输出 $y[n]$ 也有界：<br>$$<br>|y[n]| \leq K &lt; \infty, \quad \forall n<br>$$</p>
+<h4 id="❌-不稳定系统举例："><a href="#❌-不稳定系统举例：" class="headerlink" title="❌ 不稳定系统举例："></a>❌ 不稳定系统举例：</h4><p>$$<br>y[n] &#x3D; \sum_{k&#x3D;-\infty}^{n} x[k]<br>$$<br>即使输入有界，输出可能无限增长（如阶跃输入时）。</p>
+<hr>
+<h3 id="5-静态系统（无记忆）与-动态系统（有记忆）"><a href="#5-静态系统（无记忆）与-动态系统（有记忆）" class="headerlink" title="5. 静态系统（无记忆）与 动态系统（有记忆）"></a>5. 静态系统（无记忆）与 动态系统（有记忆）</h3><h4 id="✅-静态（无记忆）系统："><a href="#✅-静态（无记忆）系统：" class="headerlink" title="✅ 静态（无记忆）系统："></a>✅ 静态（无记忆）系统：</h4><p>输出仅依赖于当前输入：<br>$$<br>y[n] &#x3D; f\big(x[n]\big)<br>$$</p>
+<h4 id="❌-动态（有记忆）系统："><a href="#❌-动态（有记忆）系统：" class="headerlink" title="❌ 动态（有记忆）系统："></a>❌ 动态（有记忆）系统：</h4><p>输出依赖于当前及&#x2F;或过去输入：<br>$$<br>y[n] &#x3D; x[n] + x[n-1] + \dots + x[n-N]<br>$$</p>
+<hr>
+<h2 id="四、📈-常见离散时间系统模型与公式"><a href="#四、📈-常见离散时间系统模型与公式" class="headerlink" title="四、📈 常见离散时间系统模型与公式"></a>四、📈 常见离散时间系统模型与公式</h2><h3 id="1-差分方程（Difference-Equation）"><a href="#1-差分方程（Difference-Equation）" class="headerlink" title="1. 差分方程（Difference Equation）"></a>1. 差分方程（Difference Equation）</h3><p>离散时间系统常用**线性常系数差分方程（LCCDE）**来描述：</p>
+<p>$$<br>\sum_{k&#x3D;0}^{N} a_k y[n-k] &#x3D; \sum_{k&#x3D;0}^{M} b_k x[n-k]<br>$$</p>
+<p>或者展开写为：<br>$$<br>a_0 y[n] + a_1 y[n-1] + \dots + a_N y[n-N] &#x3D; b_0 x[n] + b_1 x[n-1] + \dots + b_M x[n-M]<br>$$</p>
+<blockquote>
+<p>📌 其中 $a_k, b_k$ 是系统常数，通常为实数。</p>
+</blockquote>
+<h4 id="例子：一阶差分方程"><a href="#例子：一阶差分方程" class="headerlink" title="例子：一阶差分方程"></a>例子：一阶差分方程</h4><p>$$<br>y[n] + \alpha y[n-1] &#x3D; \beta x[n]<br>$$<br>其中 $\alpha, \beta$ 为常数。</p>
+<hr>
+<h3 id="2-Z-变换（Z-Transform）"><a href="#2-Z-变换（Z-Transform）" class="headerlink" title="2. Z 变换（Z-Transform）"></a>2. Z 变换（Z-Transform）</h3><p>Z变换是分析离散时间系统的重要工具，定义为：</p>
+<p>$$<br>X(z) &#x3D; \mathcal{Z}\big{x[n]\big} &#x3D; \sum_{n&#x3D;-\infty}^{\infty} x[n] z^{-n}<br>$$</p>
+<p>其中 $z &#x3D; re^{j\omega}$ 是一个复数变量，$r$ 为模，$\omega$ 为角度（频率）。</p>
+<h4 id="常见-Z-变换对："><a href="#常见-Z-变换对：" class="headerlink" title="常见 Z 变换对："></a>常见 Z 变换对：</h4><ul>
+<li><p>单位脉冲序列：<br>$$<br>\delta[n] &#x3D;<br>\begin{cases}<br>1, &amp; n &#x3D; 0 \<br>0, &amp; n<br>eq 0<br>\end{cases}<br>\quad \Rightarrow \quad \mathcal{Z}{\delta[n]} &#x3D; 1<br>$$</p>
+</li>
+<li><p>单位阶跃序列：<br>$$<br>u[n] &#x3D;<br>\begin{cases}<br>1, &amp; n \geq 0 \<br>0, &amp; n &lt; 0<br>\end{cases}<br>\quad \Rightarrow \quad \mathcal{Z}{u[n]} &#x3D; \frac{1}{1 - z^{-1}}, \quad |z| &gt; 1<br>$$</p>
+</li>
 </ul>
-<p>我们可以用如下表格总结常见组合：</p>
+<hr>
+<h3 id="3-系统函数（传递函数）"><a href="#3-系统函数（传递函数）" class="headerlink" title="3. 系统函数（传递函数）"></a>3. 系统函数（传递函数）</h3><p>对于一个线性时不变（LTI）离散时间系统，其系统函数 $H(z)$ 为输出与输入 Z 变换之比：</p>
+<p>$$<br>H(z) &#x3D; \frac{Y(z)}{X(z)} &#x3D; \frac{\sum_{k&#x3D;0}^{M} b_k z^{-k}}{\sum_{k&#x3D;0}^{N} a_k z^{-k}}<br>$$</p>
+<blockquote>
+<p>通过 $H(z)$ 可分析系统的<strong>稳定性、频率响应、极点与零点分布</strong>等。</p>
+</blockquote>
+<hr>
+<h2 id="五、📚-学习小结"><a href="#五、📚-学习小结" class="headerlink" title="五、📚 学习小结"></a>五、📚 学习小结</h2><p>通过本文，我们学习了：</p>
 <table>
 <thead>
 <tr>
-<th>系统类型</th>
-<th>特点简述</th>
+<th>维度</th>
+<th>分类类型</th>
+<th>关键特性</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td>线性时不变 (LTI)</td>
-<td>最重要的一类，有完整的理论体系，易于分析设计</td>
+<tbody><tr>
+<td>线性性</td>
+<td>线性 &#x2F; 非线性</td>
+<td>是否满足叠加性与齐次性</td>
 </tr>
 <tr>
-<td>线性时变</td>
-<td>线性但随时间变化，分析较复杂</td>
+<td>时不变性</td>
+<td>时不变 &#x2F; 时变</td>
+<td>系统特性是否随时间变化</td>
 </tr>
 <tr>
-<td>非线性时不变</td>
-<td>非线性但特性固定，分析依赖于具体形式</td>
+<td>因果性</td>
+<td>因果 &#x2F; 非因果</td>
+<td>输出是否只依赖于当前及过去输入</td>
 </tr>
 <tr>
-<td>非线性时变</td>
-<td>最复杂的一类，通常难以获得解析解</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="四常见例子">四、常见例子</h2>
-<table>
-<thead>
-<tr>
-<th>系统方程</th>
-<th>分类说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>( y[n] = a x[n] )</td>
-<td>线性、时不变、因果、静态</td>
+<td>稳定性</td>
+<td>稳定 &#x2F; 不稳定</td>
+<td>是否满足 BIBO 条件</td>
 </tr>
 <tr>
-<td>( y[n] = x[n] + x[n-1] )</td>
-<td>线性、时不变、因果、动态</td>
+<td>记忆性</td>
+<td>静态 &#x2F; 动态</td>
+<td>是否依赖历史输入</td>
 </tr>
 <tr>
-<td>( y[n] = x[n]^2 )</td>
-<td>非线性、时不变、因果</td>
+<td>数学模型</td>
+<td>差分方程、Z变换</td>
+<td>描述系统输入输出关系的核心工具</td>
 </tr>
-<tr>
-<td>( y[n] = x[n+1] )</td>
-<td>线性、时不变、非因果</td>
-</tr>
-<tr>
-<td>( y[n] = n x[n] )</td>
-<td>线性、时变、因果</td>
-</tr>
-<tr>
-<td>( y[n] = (x[n]) )</td>
-<td>非线性、时不变、因果</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="五学习小结">五、学习小结</h2>
-<p>通过本次学习，我掌握了离散时间系统的主要分类维度，包括：</p>
-<ol type="1">
-<li><strong>线性 vs 非线性</strong></li>
-<li><strong>时不变 vs 时变</strong></li>
-<li><strong>因果 vs 非因果</strong></li>
-<li><strong>稳定 vs 不稳定</strong></li>
-<li><strong>静态（无记忆） vs 动态（有记忆）</strong></li>
-</ol>
-<p>这些分类是我们分析和设计离散时间系统（尤其是数字信号处理、控制系统等）的基础，尤其是
-<strong>线性时不变系统（LTI）</strong>，是后续学习<strong>卷积、Z变换、差分方程、频域分析</strong>的重要前提。</p>
-<hr />
-<h2 id="六参考资料-推荐阅读">六、参考资料 &amp; 推荐阅读</h2>
+</tbody></table>
+<p>特别是，我们引入了：</p>
 <ul>
+<li><strong>数学公式</strong>：如差分方程、Z变换、系统函数</li>
+<li><strong>希腊符号</strong>：如 $\alpha, \beta, n_0, \omega, z$</li>
+<li><strong>专业记号</strong>：如 $\mathcal{Z}{x[n]}$、$\delta[n]$、$u[n]$</li>
+</ul>
+<p>这些都是分析离散时间系统（如数字滤波器、控制系统）的基础。</p>
+<hr>
+<h2 id="六、🔗-参考资料"><a href="#六、🔗-参考资料" class="headerlink" title="六、🔗 参考资料"></a>六、🔗 参考资料</h2><ul>
 <li>《信号与系统》—— Alan V. Oppenheim</li>
 <li>《数字信号处理》—— John G. Proakis</li>
-<li>MIT OpenCourseWare: Signals and Systems</li>
-<li>Hexo 博客 / Markdown 学习笔记整理</li>
+<li><a href="https://docs.mathjax.org/">MathJax LaTeX 数学公式语法</a></li>
+<li>Hexo + MathJax 渲染配置教程（我的上一篇文章）</li>
 </ul>
-<hr />
-<p>🔖 <strong>标签</strong>：#离散时间系统 #信号与系统 #LTI系统
-#数字信号处理 #学习记录</p>
-<hr />
+<hr>
+<h2 id="🏷️-标签"><a href="#🏷️-标签" class="headerlink" title="🏷️ 标签"></a>🏷️ 标签</h2><p>#离散时间系统 #信号与系统 #差分方程 #Z变换 #数学公式 #系统函数 #学习记录 #LaTeX #希腊符号</p>
 
     
 
@@ -453,11 +410,15 @@ Time-Invariant）</strong>：是最常见、最基础、也最易分析的一类
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">控制理论</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数学建模</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">数字信号处理</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Z变换</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">差分方程</a>
         		</li>
       		
 		</ul>
@@ -473,7 +434,11 @@ Time-Invariant）</strong>：是最常见、最基础、也最易分析的一类
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="/categories/信号与系统/学习记录//" class="article-tag-list-link color5">学习记录</a>
+        			<a href="/categories/信号与系统/数学公式//" class="article-tag-list-link color5">数学公式</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/信号与系统/数学公式/学习记录//" class="article-tag-list-link color5">学习记录</a>
         		</li>
       		
 		</ul>
@@ -541,29 +506,19 @@ Time-Invariant）</strong>：是最常见、最基础、也最易分析的一类
   
   <div class="article-entry" itemprop="articleBody">
     
-    <p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very
-first post. Check <a href="https://hexo.io/docs/">documentation</a> for
-more info. If you get any problems when using Hexo, you can find the
-answer in <a
-href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or
-you can ask me on <a
-href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="quick-start">Quick Start</h2>
-<h3 id="create-a-new-post">Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a
-href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="run-server">Run server</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+    <p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
 <p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="generate-static-files">Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a
-href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="deploy-to-remote-sites">Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a
-href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 
     
 
@@ -746,11 +701,15 @@ href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">控制理论</a>
+                <a href="javascript:void(0)" class="js-tag color5">数学建模</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">数字信号处理</a>
+                <a href="javascript:void(0)" class="js-tag color4">Z变换</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">差分方程</a>
               </li>
             
             <div class="clearfix"></div>
