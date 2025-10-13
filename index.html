@@ -233,159 +233,117 @@
     <article id="post-离散时间系统的分类" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2025/10/05/%E7%A6%BB%E6%95%A3%E6%97%B6%E9%97%B4%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%88%86%E7%B1%BB/" target="_blank">离散时间系统的分类与数学描述</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2025/10/05/%E7%A6%BB%E6%95%A3%E6%97%B6%E9%97%B4%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%88%86%E7%B1%BB/" class="archive-article-date">
-        <time datetime="2025-10-05T13:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-10-05</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="离散时间系统的分类与数学描述"><a href="#离散时间系统的分类与数学描述" class="headerlink" title="离散时间系统的分类与数学描述"></a>离散时间系统的分类与数学描述</h1><h2 id="一、🔍-什么是离散时间系统？"><a href="#一、🔍-什么是离散时间系统？" class="headerlink" title="一、🔍 什么是离散时间系统？"></a>一、🔍 什么是离散时间系统？</h2><p>离散时间系统（<strong>Discrete-Time System</strong>）是指<strong>系统的输入信号 $x[n]$ 和输出信号 $y[n]$ 都是定义在离散时间点上的信号</strong>，通常时间序号 $n \in \mathbb{Z}$（整数集合）。</p>
-<p>这类系统广泛用于：</p>
+    <h1 id="离散时间系统分类详解：理解数字信号处理的基石"><a href="#离散时间系统分类详解：理解数字信号处理的基石" class="headerlink" title="离散时间系统分类详解：理解数字信号处理的基石"></a>离散时间系统分类详解：理解数字信号处理的基石</h1><h2 id="一、离散时间系统的分类维度"><a href="#一、离散时间系统的分类维度" class="headerlink" title="一、离散时间系统的分类维度"></a>一、离散时间系统的分类维度</h2><p>离散时间系统可以根据其输入与输出关系的不同特性，从多个维度进行分类。理解这些分类对于分析系统特性至关重要。</p>
+<h3 id="1-静态（无记忆）系统-vs-动态（有记忆）系统"><a href="#1-静态（无记忆）系统-vs-动态（有记忆）系统" class="headerlink" title="1. 静态（无记忆）系统 vs. 动态（有记忆）系统"></a>1. 静态（无记忆）系统 vs. 动态（有记忆）系统</h3><p>这个分类标准关注系统的输出是否与过去的输入状态有关。</p>
 <ul>
-<li>数字信号处理（DSP）</li>
-<li>自动控制</li>
-<li>通信系统</li>
-<li>图像与语音处理</li>
+<li><strong>静态系统</strong>：系统在任意时刻 <code>n</code> 的输出 <code>y(n)</code> <strong>只取决于同一时刻的输入</strong> <code>x(n)</code>，与过去或未来的输入无关。构成这种系统的单元通常只包括加法器和乘法器。<ul>
+<li><strong>例子</strong>：<code>y(n) = 5x(n)</code> 或 <code>y(n) = (x(n))²</code>。</li>
 </ul>
-<p>与<strong>连续时间系统</strong>（信号定义在连续时间 $t \in \mathbb{R}$ 上）不同，离散时间系统通常用<strong>序列</strong>和<strong>差分方程</strong>来描述。</p>
-<hr>
-<h2 id="二、📐-离散时间系统的数学表示"><a href="#二、📐-离散时间系统的数学表示" class="headerlink" title="二、📐 离散时间系统的数学表示"></a>二、📐 离散时间系统的数学表示</h2><h3 id="1-输入与输出关系"><a href="#1-输入与输出关系" class="headerlink" title="1. 输入与输出关系"></a>1. 输入与输出关系</h3><p>一个离散时间系统可由输入序列 $x[n]$ 和输出序列 $y[n]$ 之间的关系来描述，通常写为：</p>
-<p>$$<br>y[n] &#x3D; T\big{ x[n] \big}<br>$$</p>
-<p>其中 $T{\cdot}$ 表示系统的<strong>变换或操作</strong>，可以是线性或非线性的。</p>
-<hr>
-<h2 id="三、🔢-离散时间系统的常见分类（含数学描述）"><a href="#三、🔢-离散时间系统的常见分类（含数学描述）" class="headerlink" title="三、🔢 离散时间系统的常见分类（含数学描述）"></a>三、🔢 离散时间系统的常见分类（含数学描述）</h2><p>我们仍然从以下几个经典维度对离散时间系统进行分类，但这次加入数学表达式与希腊字母（如 $\alpha, \beta, n_0$ 等）以增强技术性。</p>
-<hr>
-<h3 id="1-线性系统-与非线性系统（Linear-Nonlinear）"><a href="#1-线性系统-与非线性系统（Linear-Nonlinear）" class="headerlink" title="1. 线性系统 与非线性系统（Linear &#x2F; Nonlinear）"></a>1. 线性系统 与非线性系统（Linear &#x2F; Nonlinear）</h3><h4 id="✅-线性系统满足："><a href="#✅-线性系统满足：" class="headerlink" title="✅ 线性系统满足："></a>✅ 线性系统满足：</h4><ul>
-<li><strong>叠加性（可加性）</strong> 与 <strong>齐次性（比例性）</strong></li>
-</ul>
-<p>若：<br>$$<br>y_1[n] &#x3D; T{x_1[n]}, \quad y_2[n] &#x3D; T{x_2[n]}<br>$$</p>
-<p>则：<br>$$<br>T{a x_1[n] + b x_2[n]} &#x3D; a y_1[n] + b y_2[n]<br>$$</p>
-<p>其中 $a, b \in \mathbb{R}$（或 $\mathbb{C}$）为任意常数。</p>
-<blockquote>
-<p>📌 常见线性系统举例：<br>$$<br>y[n] &#x3D; \alpha x[n] + \beta<br>$$<br>其中 $\alpha, \beta$ 为常数，且不依赖于 $n$ 或历史输入。</p>
-</blockquote>
-<h4 id="❌-非线性系统举例："><a href="#❌-非线性系统举例：" class="headerlink" title="❌ 非线性系统举例："></a>❌ 非线性系统举例：</h4><p>$$<br>y[n] &#x3D; x[n]^2, \quad y[n] &#x3D; \sin(x[n]), \quad y[n] &#x3D; x[n] \cdot x[n-1]<br>$$</p>
-<hr>
-<h3 id="2-时不变系统-与时变系统（Time-Invariant-Time-Varying）"><a href="#2-时不变系统-与时变系统（Time-Invariant-Time-Varying）" class="headerlink" title="2. 时不变系统 与时变系统（Time-Invariant &#x2F; Time-Varying）"></a>2. 时不变系统 与时变系统（Time-Invariant &#x2F; Time-Varying）</h3><h4 id="✅-时不变系统："><a href="#✅-时不变系统：" class="headerlink" title="✅ 时不变系统："></a>✅ 时不变系统：</h4><p>若：<br>$$<br>y[n] &#x3D; T{x[n]}<br>$$</p>
-<p>则对于任意整数时移 $n_0$，有：<br>$$<br>y[n - n_0] &#x3D; T{x[n - n_0]}<br>$$</p>
-<blockquote>
-<p>📌 即：系统特性不随时间变化，输入延时导致输出等量延时。</p>
-</blockquote>
-<h4 id="❌-时变系统举例："><a href="#❌-时变系统举例：" class="headerlink" title="❌ 时变系统举例："></a>❌ 时变系统举例：</h4><p>$$<br>y[n] &#x3D; n \cdot x[n]<br>$$<br>这里系统增益 $n$ 依赖于当前时刻，因此是时变的。</p>
-<hr>
-<h3 id="3-因果系统-与非因果系统（Causal-Non-Causal）"><a href="#3-因果系统-与非因果系统（Causal-Non-Causal）" class="headerlink" title="3. 因果系统 与非因果系统（Causal &#x2F; Non-Causal）"></a>3. 因果系统 与非因果系统（Causal &#x2F; Non-Causal）</h3><h4 id="✅-因果系统："><a href="#✅-因果系统：" class="headerlink" title="✅ 因果系统："></a>✅ 因果系统：</h4><p>输出 $y[n]$ <strong>只依赖于当前及&#x2F;或过去输入</strong>，即：<br>$$<br>y[n] &#x3D; f\big(x[n], x[n-1], x[n-2], \dots \big)<br>$$</p>
-<blockquote>
-<p>✅ 因果系统可以实现实时处理。</p>
-</blockquote>
-<h4 id="❌-非因果系统举例："><a href="#❌-非因果系统举例：" class="headerlink" title="❌ 非因果系统举例："></a>❌ 非因果系统举例：</h4><p>$$<br>y[n] &#x3D; x[n+1], \quad y[n] &#x3D; x[n+2] + x[n]<br>$$<br>输出依赖于未来的输入，无法实时实现（常用于离线处理）。</p>
-<hr>
-<h3 id="4-稳定系统-与-不稳定系统（Stable-Unstable）"><a href="#4-稳定系统-与-不稳定系统（Stable-Unstable）" class="headerlink" title="4. 稳定系统 与 不稳定系统（Stable &#x2F; Unstable）"></a>4. 稳定系统 与 不稳定系统（Stable &#x2F; Unstable）</h3><p>采用 **BIBO 稳定性（有界输入有界输出）**标准：</p>
-<h4 id="✅-稳定系统："><a href="#✅-稳定系统：" class="headerlink" title="✅ 稳定系统："></a>✅ 稳定系统：</h4><p>如果输入 $x[n]$ 满足：<br>$$<br>|x[n]| \leq M &lt; \infty, \quad \forall n<br>$$<br>则输出 $y[n]$ 也有界：<br>$$<br>|y[n]| \leq K &lt; \infty, \quad \forall n<br>$$</p>
-<h4 id="❌-不稳定系统举例："><a href="#❌-不稳定系统举例：" class="headerlink" title="❌ 不稳定系统举例："></a>❌ 不稳定系统举例：</h4><p>$$<br>y[n] &#x3D; \sum_{k&#x3D;-\infty}^{n} x[k]<br>$$<br>即使输入有界，输出可能无限增长（如阶跃输入时）。</p>
-<hr>
-<h3 id="5-静态系统（无记忆）与-动态系统（有记忆）"><a href="#5-静态系统（无记忆）与-动态系统（有记忆）" class="headerlink" title="5. 静态系统（无记忆）与 动态系统（有记忆）"></a>5. 静态系统（无记忆）与 动态系统（有记忆）</h3><h4 id="✅-静态（无记忆）系统："><a href="#✅-静态（无记忆）系统：" class="headerlink" title="✅ 静态（无记忆）系统："></a>✅ 静态（无记忆）系统：</h4><p>输出仅依赖于当前输入：<br>$$<br>y[n] &#x3D; f\big(x[n]\big)<br>$$</p>
-<h4 id="❌-动态（有记忆）系统："><a href="#❌-动态（有记忆）系统：" class="headerlink" title="❌ 动态（有记忆）系统："></a>❌ 动态（有记忆）系统：</h4><p>输出依赖于当前及&#x2F;或过去输入：<br>$$<br>y[n] &#x3D; x[n] + x[n-1] + \dots + x[n-N]<br>$$</p>
-<hr>
-<h2 id="四、📈-常见离散时间系统模型与公式"><a href="#四、📈-常见离散时间系统模型与公式" class="headerlink" title="四、📈 常见离散时间系统模型与公式"></a>四、📈 常见离散时间系统模型与公式</h2><h3 id="1-差分方程（Difference-Equation）"><a href="#1-差分方程（Difference-Equation）" class="headerlink" title="1. 差分方程（Difference Equation）"></a>1. 差分方程（Difference Equation）</h3><p>离散时间系统常用**线性常系数差分方程（LCCDE）**来描述：</p>
-<p>$$<br>\sum_{k&#x3D;0}^{N} a_k y[n-k] &#x3D; \sum_{k&#x3D;0}^{M} b_k x[n-k]<br>$$</p>
-<p>或者展开写为：<br>$$<br>a_0 y[n] + a_1 y[n-1] + \dots + a_N y[n-N] &#x3D; b_0 x[n] + b_1 x[n-1] + \dots + b_M x[n-M]<br>$$</p>
-<blockquote>
-<p>📌 其中 $a_k, b_k$ 是系统常数，通常为实数。</p>
-</blockquote>
-<h4 id="例子：一阶差分方程"><a href="#例子：一阶差分方程" class="headerlink" title="例子：一阶差分方程"></a>例子：一阶差分方程</h4><p>$$<br>y[n] + \alpha y[n-1] &#x3D; \beta x[n]<br>$$<br>其中 $\alpha, \beta$ 为常数。</p>
-<hr>
-<h3 id="2-Z-变换（Z-Transform）"><a href="#2-Z-变换（Z-Transform）" class="headerlink" title="2. Z 变换（Z-Transform）"></a>2. Z 变换（Z-Transform）</h3><p>Z变换是分析离散时间系统的重要工具，定义为：</p>
-<p>$$<br>X(z) &#x3D; \mathcal{Z}\big{x[n]\big} &#x3D; \sum_{n&#x3D;-\infty}^{\infty} x[n] z^{-n}<br>$$</p>
-<p>其中 $z &#x3D; re^{j\omega}$ 是一个复数变量，$r$ 为模，$\omega$ 为角度（频率）。</p>
-<h4 id="常见-Z-变换对："><a href="#常见-Z-变换对：" class="headerlink" title="常见 Z 变换对："></a>常见 Z 变换对：</h4><ul>
-<li><p>单位脉冲序列：<br>$$<br>\delta[n] &#x3D;<br>\begin{cases}<br>1, &amp; n &#x3D; 0 \<br>0, &amp; n<br>eq 0<br>\end{cases}<br>\quad \Rightarrow \quad \mathcal{Z}{\delta[n]} &#x3D; 1<br>$$</p>
 </li>
-<li><p>单位阶跃序列：<br>$$<br>u[n] &#x3D;<br>\begin{cases}<br>1, &amp; n \geq 0 \<br>0, &amp; n &lt; 0<br>\end{cases}<br>\quad \Rightarrow \quad \mathcal{Z}{u[n]} &#x3D; \frac{1}{1 - z^{-1}}, \quad |z| &gt; 1<br>$$</p>
+<li><strong>动态系统</strong>：系统在任意时刻 <code>n</code> 的输出 <code>y(n)</code>，不仅与当前输入 <code>x(n)</code> 有关，<strong>还与过去的输入&#x2F;输出有关</strong>。这种系统包含记忆元件，如寄存器或延迟单元。<ul>
+<li><strong>例子</strong>：累加器 <code>y(n) = y(n-1) + x(n)</code> 和滑动平均滤波器都是动态系统。</li>
+</ul>
 </li>
 </ul>
-<hr>
-<h3 id="3-系统函数（传递函数）"><a href="#3-系统函数（传递函数）" class="headerlink" title="3. 系统函数（传递函数）"></a>3. 系统函数（传递函数）</h3><p>对于一个线性时不变（LTI）离散时间系统，其系统函数 $H(z)$ 为输出与输入 Z 变换之比：</p>
-<p>$$<br>H(z) &#x3D; \frac{Y(z)}{X(z)} &#x3D; \frac{\sum_{k&#x3D;0}^{M} b_k z^{-k}}{\sum_{k&#x3D;0}^{N} a_k z^{-k}}<br>$$</p>
-<blockquote>
-<p>通过 $H(z)$ 可分析系统的<strong>稳定性、频率响应、极点与零点分布</strong>等。</p>
-</blockquote>
-<hr>
-<h2 id="五、📚-学习小结"><a href="#五、📚-学习小结" class="headerlink" title="五、📚 学习小结"></a>五、📚 学习小结</h2><p>通过本文，我们学习了：</p>
+<h3 id="2-线性系统-vs-非线性系统"><a href="#2-线性系统-vs-非线性系统" class="headerlink" title="2. 线性系统 vs. 非线性系统"></a>2. 线性系统 vs. 非线性系统</h3><p>这个分类标准关注系统是否满足<strong>叠加原理</strong>。</p>
+<p>一个系统是线性的，当且仅当它同时满足以下两个性质：</p>
+<ul>
+<li><strong>齐次性</strong>：如果输入 <code>x[n]</code> 产生输出 <code>y[n]</code>，那么输入 <code>a * x[n]</code> 将产生输出 <code>a * y[n]</code>。</li>
+<li><strong>可加性</strong>：如果输入 <code>x1[n]</code> 产生输出 <code>y1[n]</code>，输入 <code>x2[n]</code> 产生输出 <code>y2[n]</code>，那么输入 <code>x1[n] + x2[n]</code> 将产生输出 <code>y1[n] + y2[n]</code>。</li>
+</ul>
+<p>将两者结合，对于线性系统，若 <code>x1[n] → y1[n]</code> 且 <code>x2[n] → y2[n]</code>，则对于任意常数 <code>α</code> 和 <code>β</code>，必有：<code>T[αx1(n) + βx2(n)] = αy1(n) + βy2(n)</code>。</p>
+<ul>
+<li><strong>线性系统例子</strong>：<code>y(n) = n * x(n)</code>。</li>
+<li><strong>非线性系统例子</strong>：<code>y(n) = (x(n))²</code>。因为 <code>(a1x1(n) + a2x2(n))² ≠ a1x1(n)² + a2x2(n)²</code>。</li>
+</ul>
+<p><strong>注意</strong>：形如 <code>y(n) = 4x(n) + 6</code> 的系统被称为<strong>增量线性系统</strong>，它不满足零输入产生零输出的条件，因此不是严格意义上的线性系统。</p>
+<h3 id="3-时不变系统-vs-时变系统"><a href="#3-时不变系统-vs-时变系统" class="headerlink" title="3. 时不变系统 vs. 时变系统"></a>3. 时不变系统 vs. 时变系统</h3><p>这个分类标准关注系统的特性是否随时间变化。</p>
+<ul>
+<li><strong>时不变系统</strong>：系统的参数和操作规则<strong>不随时间变化</strong>。如果一个输入信号产生一个输出信号，那么当该输入信号被延迟 <code>k</code> 个单位后，输出信号也将会被<strong>完全一致地延迟</strong> <code>k</code> 个单位。即，若 <code>y(n) = T[x(n)]</code>，则对于任意整数 <code>k</code>，有 <code>y(n-k) = T[x(n-k)]</code>。<ul>
+<li><strong>例子</strong>：<code>y(n) = x(n) - x(n-1)</code>。</li>
+</ul>
+</li>
+<li><strong>时变系统</strong>：系统的特性<strong>随时间变化</strong>。输入信号的延迟不会导致输出信号产生同等程度的简单延迟。<ul>
+<li><strong>例子</strong>：<code>y(n) = n * x(n)</code> 或 <code>y(n) = x(-n)</code>（取反系统）都是时变系统。</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-因果系统-vs-非因果系统"><a href="#4-因果系统-vs-非因果系统" class="headerlink" title="4. 因果系统 vs. 非因果系统"></a>4. 因果系统 vs. 非因果系统</h3><p>这个分类标准关注系统的输出是否依赖于未来的输入，这在实时处理中尤为重要。</p>
+<ul>
+<li><strong>因果系统</strong>：系统在任意时刻 <code>n</code> 的输出 <code>y(n)</code> <strong>仅取决于当前和过去时刻的输入</strong>（即 <code>x(n)</code>, <code>x(n-1)</code>, <code>x(n-2)</code>, …），而与未来的输入（<code>x(n+1)</code>, <code>x(n+2)</code>, …）无关。物理上可实现的系统通常是因果的。<ul>
+<li><strong>例子</strong>：<code>y(n) = x(n) + x(n-1)</code>。</li>
+</ul>
+</li>
+<li><strong>非因果系统</strong>：系统在任意时刻 <code>n</code> 的输出 <code>y(n)</code> <strong>依赖于未来的输入</strong>。非因果系统在实时处理中无法实现，但可用于离线处理（如处理已存储的数据）。<ul>
+<li><strong>例子</strong>：<code>y(n) = x(n+1)</code>（单位超前系统）或 <code>y(n) = x(-n)</code>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-稳定系统-vs-不稳定系统"><a href="#5-稳定系统-vs-不稳定系统" class="headerlink" title="5. 稳定系统 vs. 不稳定系统"></a>5. 稳定系统 vs. 不稳定系统</h3><p>这个分类标准关注系统输入输出的有界性。</p>
+<ul>
+<li><strong>稳定系统</strong>：当系统的输入是一个有界序列（即存在一个常数 <code>Bx</code>，使得对于所有 <code>n</code>，<code>|x(n)| &lt; Bx</code>）时，系统的输出也必然是一个有界序列（存在常数 <code>By</code>，使得对于所有 <code>n</code>，<code>|y(n)| &lt; By</code>）。这个特性被称为<strong>BIBO稳定</strong>。</li>
+<li><strong>不稳定系统</strong>：一个有界的输入可能导致一个无界的输出。在实际应用中，不稳定系统通常需要避免。</li>
+</ul>
+<p>对于<strong>线性时不变系统</strong>，有一个非常简洁的稳定性判据：系统稳定的<strong>充分必要条件</strong>是其单位冲激响应 <code>h(n)</code> 是<strong>绝对可和的</strong>，即满足 <code>∑|h(n)| &lt; ∞</code>（从 n&#x3D;-∞ 到 ∞）。</p>
+<h2 id="二、特别的明星：线性时不变系统"><a href="#二、特别的明星：线性时不变系统" class="headerlink" title="二、特别的明星：线性时不变系统"></a>二、特别的明星：线性时不变系统</h2><p>在理论研究和工程实践中，<strong>线性时不变系统</strong> 是最重要、最常被研究的一类系统。因为它们同时满足线性和时不变性，使得数学分析和处理变得非常简便。</p>
+<ul>
+<li><strong>卷积和表示</strong>：任何LTI系统都可以完全由其<strong>单位冲激响应</strong> <code>h(n)</code>（即系统对单位脉冲 <code>δ(n)</code> 的响应）来描述。对于任意输入 <code>x(n)</code>，系统的输出 <code>y(n)</code> 可以通过输入信号与单位冲激响应的<strong>卷积和</strong>来计算：<code>y(n) = x(n) * h(n) = ∑ x(k)h(n-k)</code>。</li>
+<li><strong>FIR与IIR系统</strong>：根据冲激响应的持续时间，LTI系统可进一步分为：<ul>
+<li><strong>有限冲激响应系统</strong>：<code>h(n)</code> 只在有限时间内非零。</li>
+<li><strong>无限冲激响应系统</strong>：<code>h(n)</code> 在理论上是无限长的。</li>
+</ul>
+</li>
+<li><strong>因果性判据</strong>：一个LTI系统是因果的，当且仅当其冲激响应满足 <code>h(n) = 0</code>（对于所有 <code>n &lt; 0</code>）。</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>离散时间系统的分类为我们提供了一套强大的工具，用以理解和预测系统的行为。我们可以通过以下表格快速回顾：</p>
 <table>
 <thead>
 <tr>
-<th>维度</th>
-<th>分类类型</th>
-<th>关键特性</th>
+<th align="left">分类维度</th>
+<th align="left">类型1</th>
+<th align="left">类型2</th>
+<th align="left">关键判断标准</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>线性性</td>
-<td>线性 &#x2F; 非线性</td>
-<td>是否满足叠加性与齐次性</td>
+<td align="left"><strong>记忆性</strong></td>
+<td align="left">静态（无记忆）系统</td>
+<td align="left">动态（有记忆）系统</td>
+<td align="left">输出是否仅与当前输入有关？</td>
 </tr>
 <tr>
-<td>时不变性</td>
-<td>时不变 &#x2F; 时变</td>
-<td>系统特性是否随时间变化</td>
+<td align="left"><strong>叠加性</strong></td>
+<td align="left">线性系统</td>
+<td align="left">非线性系统</td>
+<td align="left">是否满足齐次性和可加性？</td>
 </tr>
 <tr>
-<td>因果性</td>
-<td>因果 &#x2F; 非因果</td>
-<td>输出是否只依赖于当前及过去输入</td>
+<td align="left"><strong>时变性</strong></td>
+<td align="left">时不变系统</td>
+<td align="left">时变系统</td>
+<td align="left">输入延迟是否导致输出同等延迟？</td>
 </tr>
 <tr>
-<td>稳定性</td>
-<td>稳定 &#x2F; 不稳定</td>
-<td>是否满足 BIBO 条件</td>
+<td align="left"><strong>因果性</strong></td>
+<td align="left">因果系统</td>
+<td align="left">非因果系统</td>
+<td align="left">输出是否取决于未来输入？</td>
 </tr>
 <tr>
-<td>记忆性</td>
-<td>静态 &#x2F; 动态</td>
-<td>是否依赖历史输入</td>
+<td align="left"><strong>稳定性</strong></td>
+<td align="left">稳定系统（BIBO）</td>
+<td align="left">不稳定系统</td>
+<td align="left">有界输入是否产生有界输出？</td>
 </tr>
 <tr>
-<td>数学模型</td>
-<td>差分方程、Z变换</td>
-<td>描述系统输入输出关系的核心工具</td>
+<td align="left"><strong>冲激响应</strong></td>
+<td align="left">FIR系统</td>
+<td align="left">IIR系统</td>
+<td align="left">冲激响应长度有限还是无限？</td>
 </tr>
 </tbody></table>
-<p>特别是，我们引入了：</p>
-<ul>
-<li><strong>数学公式</strong>：如差分方程、Z变换、系统函数</li>
-<li><strong>希腊符号</strong>：如 $\alpha, \beta, n_0, \omega, z$</li>
-<li><strong>专业记号</strong>：如 $\mathcal{Z}{x[n]}$、$\delta[n]$、$u[n]$</li>
-</ul>
-<p>这些都是分析离散时间系统（如数字滤波器、控制系统）的基础。</p>
-<hr>
-<h2 id="六、🔗-参考资料"><a href="#六、🔗-参考资料" class="headerlink" title="六、🔗 参考资料"></a>六、🔗 参考资料</h2><ul>
-<li>《信号与系统》—— Alan V. Oppenheim</li>
-<li>《数字信号处理》—— John G. Proakis</li>
-<li><a href="https://docs.mathjax.org/">MathJax LaTeX 数学公式语法</a></li>
-<li>Hexo + MathJax 渲染配置教程（我的上一篇文章）</li>
-</ul>
-<hr>
-<h2 id="🏷️-标签"><a href="#🏷️-标签" class="headerlink" title="🏷️ 标签"></a>🏷️ 标签</h2><p>#离散时间系统 #信号与系统 #差分方程 #Z变换 #数学公式 #系统函数 #学习记录 #LaTeX #希腊符号</p>
 
     
 
@@ -397,53 +355,7 @@
   <div class="article-info article-info-index">
     
     
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">信号与系统</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">离散时间系统</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数学建模</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Z变换</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">差分方程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
     
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/信号与系统//" class="article-tag-list-link color1">信号与系统</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/信号与系统/数学公式//" class="article-tag-list-link color5">数学公式</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/信号与系统/数学公式/学习记录//" class="article-tag-list-link color5">学习记录</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
 
     
     <p class="article-more-link">
@@ -691,26 +603,6 @@
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">信号与系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">离散时间系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数学建模</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Z变换</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">差分方程</a>
-              </li>
             
             <div class="clearfix"></div>
           </ul>
