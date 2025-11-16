@@ -264,6 +264,30 @@
     <article id="post-离散时间系统的分类" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2025/10/05/%E7%A6%BB%E6%95%A3%E6%97%B6%E9%97%B4%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%88%86%E7%B1%BB/">离散时间系统分类</a>
+	
+    </h1>
+  
+
+
+  
+  
+<a href="/2025/10/05/%E7%A6%BB%E6%95%A3%E6%97%B6%E9%97%B4%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%88%86%E7%B1%BB/" class="archive-article-date">
+        <time datetime="2025-10-05T12:29:47.665Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-10-05</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
   <div class="article-entry" itemprop="articleBody">
     
     <h1 id="离散时间系统分类详解：理解数字信号处理的基石"><a href="#离散时间系统分类详解：理解数字信号处理的基石" class="headerlink" title="离散时间系统分类详解：理解数字信号处理的基石"></a>离散时间系统分类详解：理解数字信号处理的基石</h1><h2 id="一、离散时间系统的分类维度"><a href="#一、离散时间系统的分类维度" class="headerlink" title="一、离散时间系统的分类维度"></a>一、离散时间系统的分类维度</h2><p>离散时间系统可以根据其输入与输出关系的不同特性，从多个维度进行分类。理解这些分类对于分析系统特性至关重要。</p>
@@ -278,104 +302,9 @@
 </ul>
 </li>
 </ul>
-<h3 id="2-线性系统-vs-非线性系统"><a href="#2-线性系统-vs-非线性系统" class="headerlink" title="2. 线性系统 vs. 非线性系统"></a>2. 线性系统 vs. 非线性系统</h3><p>这个分类标准关注系统是否满足<strong>叠加原理</strong>。</p>
-<p>一个系统是线性的，当且仅当它同时满足以下两个性质：</p>
-<ul>
-<li><strong>齐次性</strong>：如果输入 <code>x[n]</code> 产生输出 <code>y[n]</code>，那么输入 <code>a * x[n]</code> 将产生输出 <code>a * y[n]</code>。</li>
-<li><strong>可加性</strong>：如果输入 <code>x1[n]</code> 产生输出 <code>y1[n]</code>，输入 <code>x2[n]</code> 产生输出 <code>y2[n]</code>，那么输入 <code>x1[n] + x2[n]</code> 将产生输出 <code>y1[n] + y2[n]</code>。</li>
-</ul>
-<p>将两者结合，对于线性系统，若 <code>x1[n] → y1[n]</code> 且 <code>x2[n] → y2[n]</code>，则对于任意常数 <code>α</code> 和 <code>β</code>，必有：<code>T[αx1(n) + βx2(n)] = αy1(n) + βy2(n)</code>。</p>
-<ul>
-<li><strong>线性系统例子</strong>：<code>y(n) = n * x(n)</code>。</li>
-<li><strong>非线性系统例子</strong>：<code>y(n) = (x(n))²</code>。因为 <code>(a1x1(n) + a2x2(n))² ≠ a1x1(n)² + a2x2(n)²</code>。</li>
-</ul>
-<p><strong>注意</strong>：形如 <code>y(n) = 4x(n) + 6</code> 的系统被称为<strong>增量线性系统</strong>，它不满足零输入产生零输出的条件，因此不是严格意义上的线性系统。</p>
-<h3 id="3-时不变系统-vs-时变系统"><a href="#3-时不变系统-vs-时变系统" class="headerlink" title="3. 时不变系统 vs. 时变系统"></a>3. 时不变系统 vs. 时变系统</h3><p>这个分类标准关注系统的特性是否随时间变化。</p>
-<ul>
-<li><strong>时不变系统</strong>：系统的参数和操作规则<strong>不随时间变化</strong>。如果一个输入信号产生一个输出信号，那么当该输入信号被延迟 <code>k</code> 个单位后，输出信号也将会被<strong>完全一致地延迟</strong> <code>k</code> 个单位。即，若 <code>y(n) = T[x(n)]</code>，则对于任意整数 <code>k</code>，有 <code>y(n-k) = T[x(n-k)]</code>。<ul>
-<li><strong>例子</strong>：<code>y(n) = x(n) - x(n-1)</code>。</li>
-</ul>
-</li>
-<li><strong>时变系统</strong>：系统的特性<strong>随时间变化</strong>。输入信号的延迟不会导致输出信号产生同等程度的简单延迟。<ul>
-<li><strong>例子</strong>：<code>y(n) = n * x(n)</code> 或 <code>y(n) = x(-n)</code>（取反系统）都是时变系统。</li>
-</ul>
-</li>
-</ul>
-<h3 id="4-因果系统-vs-非因果系统"><a href="#4-因果系统-vs-非因果系统" class="headerlink" title="4. 因果系统 vs. 非因果系统"></a>4. 因果系统 vs. 非因果系统</h3><p>这个分类标准关注系统的输出是否依赖于未来的输入，这在实时处理中尤为重要。</p>
-<ul>
-<li><strong>因果系统</strong>：系统在任意时刻 <code>n</code> 的输出 <code>y(n)</code> <strong>仅取决于当前和过去时刻的输入</strong>（即 <code>x(n)</code>, <code>x(n-1)</code>, <code>x(n-2)</code>, …），而与未来的输入（<code>x(n+1)</code>, <code>x(n+2)</code>, …）无关。物理上可实现的系统通常是因果的。<ul>
-<li><strong>例子</strong>：<code>y(n) = x(n) + x(n-1)</code>。</li>
-</ul>
-</li>
-<li><strong>非因果系统</strong>：系统在任意时刻 <code>n</code> 的输出 <code>y(n)</code> <strong>依赖于未来的输入</strong>。非因果系统在实时处理中无法实现，但可用于离线处理（如处理已存储的数据）。<ul>
-<li><strong>例子</strong>：<code>y(n) = x(n+1)</code>（单位超前系统）或 <code>y(n) = x(-n)</code>。</li>
-</ul>
-</li>
-</ul>
-<h3 id="5-稳定系统-vs-不稳定系统"><a href="#5-稳定系统-vs-不稳定系统" class="headerlink" title="5. 稳定系统 vs. 不稳定系统"></a>5. 稳定系统 vs. 不稳定系统</h3><p>这个分类标准关注系统输入输出的有界性。</p>
-<ul>
-<li><strong>稳定系统</strong>：当系统的输入是一个有界序列（即存在一个常数 <code>Bx</code>，使得对于所有 <code>n</code>，<code>|x(n)| &lt; Bx</code>）时，系统的输出也必然是一个有界序列（存在常数 <code>By</code>，使得对于所有 <code>n</code>，<code>|y(n)| &lt; By</code>）。这个特性被称为<strong>BIBO稳定</strong>。</li>
-<li><strong>不稳定系统</strong>：一个有界的输入可能导致一个无界的输出。在实际应用中，不稳定系统通常需要避免。</li>
-</ul>
-<p>对于<strong>线性时不变系统</strong>，有一个非常简洁的稳定性判据：系统稳定的<strong>充分必要条件</strong>是其单位冲激响应 <code>h(n)</code> 是<strong>绝对可和的</strong>，即满足 <code>∑|h(n)| &lt; ∞</code>（从 n&#x3D;-∞ 到 ∞）。</p>
-<h2 id="二、特别的明星：线性时不变系统"><a href="#二、特别的明星：线性时不变系统" class="headerlink" title="二、特别的明星：线性时不变系统"></a>二、特别的明星：线性时不变系统</h2><p>在理论研究和工程实践中，<strong>线性时不变系统</strong> 是最重要、最常被研究的一类系统。因为它们同时满足线性和时不变性，使得数学分析和处理变得非常简便。</p>
-<ul>
-<li><strong>卷积和表示</strong>：任何LTI系统都可以完全由其<strong>单位冲激响应</strong> <code>h(n)</code>（即系统对单位脉冲 <code>δ(n)</code> 的响应）来描述。对于任意输入 <code>x(n)</code>，系统的输出 <code>y(n)</code> 可以通过输入信号与单位冲激响应的<strong>卷积和</strong>来计算：<code>y(n) = x(n) * h(n) = ∑ x(k)h(n-k)</code>。</li>
-<li><strong>FIR与IIR系统</strong>：根据冲激响应的持续时间，LTI系统可进一步分为：<ul>
-<li><strong>有限冲激响应系统</strong>：<code>h(n)</code> 只在有限时间内非零。</li>
-<li><strong>无限冲激响应系统</strong>：<code>h(n)</code> 在理论上是无限长的。</li>
-</ul>
-</li>
-<li><strong>因果性判据</strong>：一个LTI系统是因果的，当且仅当其冲激响应满足 <code>h(n) = 0</code>（对于所有 <code>n &lt; 0</code>）。</li>
-</ul>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>离散时间系统的分类为我们提供了一套强大的工具，用以理解和预测系统的行为。我们可以通过以下表格快速回顾：</p>
-<table>
-<thead>
-<tr>
-<th align="left">分类维度</th>
-<th align="left">类型1</th>
-<th align="left">类型2</th>
-<th align="left">关键判断标准</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><strong>记忆性</strong></td>
-<td align="left">静态（无记忆）系统</td>
-<td align="left">动态（有记忆）系统</td>
-<td align="left">输出是否仅与当前输入有关？</td>
-</tr>
-<tr>
-<td align="left"><strong>叠加性</strong></td>
-<td align="left">线性系统</td>
-<td align="left">非线性系统</td>
-<td align="left">是否满足齐次性和可加性？</td>
-</tr>
-<tr>
-<td align="left"><strong>时变性</strong></td>
-<td align="left">时不变系统</td>
-<td align="left">时变系统</td>
-<td align="left">输入延迟是否导致输出同等延迟？</td>
-</tr>
-<tr>
-<td align="left"><strong>因果性</strong></td>
-<td align="left">因果系统</td>
-<td align="left">非因果系统</td>
-<td align="left">输出是否取决于未来输入？</td>
-</tr>
-<tr>
-<td align="left"><strong>稳定性</strong></td>
-<td align="left">稳定系统（BIBO）</td>
-<td align="left">不稳定系统</td>
-<td align="left">有界输入是否产生有界输出？</td>
-</tr>
-<tr>
-<td align="left"><strong>冲激响应</strong></td>
-<td align="left">FIR系统</td>
-<td align="left">IIR系统</td>
-<td align="left">冲激响应长度有限还是无限？</td>
-</tr>
-</tbody></table>
-
+    
+    <a class="article-more-a" href="/2025/10/05/%E7%A6%BB%E6%95%A3%E6%97%B6%E9%97%B4%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%88%86%E7%B1%BB/#more">more >></a>
+    
     
 
     
@@ -428,8 +357,8 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2025/10/04/hello-world/" target="_blank">Hello World</a>
-  
+	  <a class="article-title" href="/2025/10/04/hello-world/">Hello World</a>
+	
     </h1>
   
 
@@ -552,7 +481,7 @@
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
-		open_in_new: true,
+		open_in_new: false,
 		toc_hide_index: true,
 		root: "/",
 		innerArchive: true,
@@ -684,8 +613,8 @@
         <ul class="search-ul">
           
             <li class="search-li">
-              <a href="https://zhousiwei.gitee.io/ibooks/" target="_blank" 
-                class="search-title" title="记录工作和学习过程中的笔记：Java、前端开发、Hexo博客、聚合支付、Linux笔记、ElasticSearch、ELK日志分析">
+              <a href="https://www.jianshu.com/u/4709712dc514" target="_blank" 
+                class="search-title" title="记录工作和学习过程中的笔记：C++、前端开发、Hexo博客、数字信号处理">
                 
                   <img src="https://zhousiwei.gitee.io/ibooks/favicon.ico">
                 
@@ -704,7 +633,7 @@
             </li>
           
             <li class="search-li">
-              <a href="https://gitee.com/zhousiwei" target="_blank" 
+              <a href="https://gitee.com/ylanren" target="_blank" 
                 class="search-title" >
                 
                   <i class="icon-link icon"></i>
@@ -714,22 +643,12 @@
             </li>
           
             <li class="search-li">
-              <a href="https://www.jianshu.com/u/02cbf31a043a" target="_blank" 
+              <a href="https://www.jianshu.com/u/4709712dc514" target="_blank" 
                 class="search-title" >
                 
                   <i class="icon-link icon"></i>
                 
                 简书
-              </a>
-            </li>
-          
-            <li class="search-li">
-              <a href="https://blog.csdn.net/qq_30930805" target="_blank" 
-                class="search-title" >
-                
-                  <i class="icon-link icon"></i>
-                
-                CSDN
               </a>
             </li>
           
