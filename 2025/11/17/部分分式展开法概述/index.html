@@ -10,15 +10,15 @@
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="1. 部分分式展开法概述部分分式展开法是求解Z逆变换的重要方法之一，特别适用于有理分式形式的Z变换表达式。其核心思想是将一个高阶的有理分式分解成多个低阶分式的和，从而简化逆变换的求解过程。 在数字信号处理中，线性时不变（LTI）系统的系统函数通常可以表示为z的有理分式形式。当我们需要从Z域变换回时域时，部分分式展开提供了一种系统化的解决方案。 基本定义：对于离散时间序列x(n)的Z变换，若X(z)">
+  <meta name="description" content="逆z变换之——部分分式展开法1. 部分分式展开法概述        部分分式展开法是求解Z逆变换的重要方法之一，特别适用于有理分式形式的Z变换表达式。其核心思想是将一个高阶的有理分式分解成多个低阶分式的和，从而简化逆变换的求解过程。         在数字信号处理中，线性时不变（LTI）系统的系统函数通常可以表示为z的有理分式形式。当我们需要从Z域变换回时域时，部分分式展开提供了一种系统化的解决方">
 <meta property="og:type" content="article">
 <meta property="og:title" content="逆z变换之——部分分式展开法">
 <meta property="og:url" content="https://ylanren.github.io/2025/11/17/%E9%83%A8%E5%88%86%E5%88%86%E5%BC%8F%E5%B1%95%E5%BC%80%E6%B3%95%E6%A6%82%E8%BF%B0/index.html">
 <meta property="og:site_name" content="Ylanren Study Record">
-<meta property="og:description" content="1. 部分分式展开法概述部分分式展开法是求解Z逆变换的重要方法之一，特别适用于有理分式形式的Z变换表达式。其核心思想是将一个高阶的有理分式分解成多个低阶分式的和，从而简化逆变换的求解过程。 在数字信号处理中，线性时不变（LTI）系统的系统函数通常可以表示为z的有理分式形式。当我们需要从Z域变换回时域时，部分分式展开提供了一种系统化的解决方案。 基本定义：对于离散时间序列x(n)的Z变换，若X(z)">
+<meta property="og:description" content="逆z变换之——部分分式展开法1. 部分分式展开法概述        部分分式展开法是求解Z逆变换的重要方法之一，特别适用于有理分式形式的Z变换表达式。其核心思想是将一个高阶的有理分式分解成多个低阶分式的和，从而简化逆变换的求解过程。         在数字信号处理中，线性时不变（LTI）系统的系统函数通常可以表示为z的有理分式形式。当我们需要从Z域变换回时域时，部分分式展开提供了一种系统化的解决方">
 <meta property="og:locale">
 <meta property="article:published_time" content="2025-11-17T06:31:11.696Z">
-<meta property="article:modified_time" content="2025-11-17T06:31:11.697Z">
+<meta property="article:modified_time" content="2025-11-17T07:32:27.358Z">
 <meta property="article:author" content="ylanren">
 <meta property="article:tag" content="ylanren,Ylanren_学习日志">
 <meta name="twitter:card" content="summary">
@@ -258,12 +258,12 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h2 id="1-部分分式展开法概述"><a href="#1-部分分式展开法概述" class="headerlink" title="1. 部分分式展开法概述"></a>1. 部分分式展开法概述</h2><p>部分分式展开法是求解Z逆变换的重要方法之一，特别适用于有理分式形式的Z变换表达式。其核心思想是将一个高阶的有理分式分解成多个低阶分式的和，从而简化逆变换的求解过程。</p>
-<p>在数字信号处理中，线性时不变（LTI）系统的系统函数通常可以表示为z的有理分式形式。当我们需要从Z域变换回时域时，部分分式展开提供了一种系统化的解决方案。</p>
+    <h1 id="逆z变换之——部分分式展开法"><a href="#逆z变换之——部分分式展开法" class="headerlink" title="逆z变换之——部分分式展开法"></a>逆z变换之——部分分式展开法</h1><h2 id="1-部分分式展开法概述"><a href="#1-部分分式展开法概述" class="headerlink" title="1. 部分分式展开法概述"></a>1. 部分分式展开法概述</h2><p>        部分分式展开法是求解Z逆变换的重要方法之一，特别适用于有理分式形式的Z变换表达式。其核心思想是将一个高阶的有理分式分解成多个低阶分式的和，从而简化逆变换的求解过程。</p>
+<p>        在数字信号处理中，线性时不变（LTI）系统的系统函数通常可以表示为z的有理分式形式。当我们需要从Z域变换回时域时，部分分式展开提供了一种系统化的解决方案。</p>
 <p><strong>基本定义</strong>：对于离散时间序列x(n)的Z变换，若X(z)可以表示为两个多项式之比：</p>
-<p>X(z)&#x3D;A(z)B(z)​&#x3D;a0​+a1​z−1+⋯+aN​z−Nb0​+b1​z−1+⋯+bM​z−M​</p>
+<p>$$<br>X(z)&#x3D;\frac{B(z)}{A(z)}​&#x3D;\frac{b_0​+b_1​z^{−1}+⋯+b_M​z^{−M​}}{a_0​+a_1​z^{−1}+⋯+a_N​z^{−N}}<br>$$</p>
 <p>其中M和N分别表示分子和分母多项式的阶数。</p>
-<h2 id="2-部分分式展开的基本原理"><a href="#2-部分分式展开的基本原理" class="headerlink" title="2. 部分分式展开的基本原理"></a>2. 部分分式展开的基本原理</h2><h3 id="2-1-数学基础"><a href="#2-1-数学基础" class="headerlink" title="2.1 数学基础"></a>2.1 数学基础</h3><p>部分分式展开建立在极点分解的基础上。任何有理分式都可以分解为部分分式之和，每个部分分式对应分母多项式的一个极点。</p>
+<h2 id="2-部分分式展开的基本原理"><a href="#2-部分分式展开的基本原理" class="headerlink" title="2. 部分分式展开的基本原理"></a>2. 部分分式展开的基本原理</h2><h3 id="2-1-数学基础"><a href="#2-1-数学基础" class="headerlink" title="2.1 数学基础"></a>2.1 数学基础</h3><p>        部分分式展开建立在极点分解的基础上。任何有理分式都可以分解为部分分式之和，每个部分分式对应分母多项式的一个极点。</p>
 <p><strong>极点类型</strong>决定了展开形式：</p>
 <ul>
 <li><p><strong>单极点</strong>：每个单极点对应一个一次项分式</p>
@@ -289,11 +289,11 @@
 <li><p><strong>确定展开形式</strong></p>
 <p>根据极点类型确定部分分式展开形式：</p>
 <ul>
-<li><p>单实极点：1−pi​z−1A​</p>
+<li><p>单实极点：$\frac{A}{1−p_i^{​z−1}}​$</p>
 </li>
-<li><p>r重实极点：1−pi​z−1A1​​+(1−pi​z−1)2A2​​+⋯+(1−pi​z−1)rAr​​</p>
+<li><p>r重实极点：$\frac{A_1}{1−p_i^{​z−1}}+\frac{A_2}{(1−p_i^{​z−1})^2}+…+\frac{A_r}{(1−p_i^{​z−1})^r}​​$</p>
 </li>
-<li><p>共轭复极点：1+a1​z−1+a2​z−2B0​+B1​z−1​（保持二次因式）</p>
+<li><p>共轭复极点：$\frac{B_0​+B_1​z^{−1}}{1+a_1​z^{−1}+a_2​z^{−2}}$​（保持二次因式）</p>
 </li>
 </ul>
 </li>
@@ -310,7 +310,7 @@
 </li>
 </ol>
 <h3 id="3-2-系数求解的留数法"><a href="#3-2-系数求解的留数法" class="headerlink" title="3.2 系数求解的留数法"></a>3.2 系数求解的留数法</h3><p>对于单极点情况，留数可通过以下公式计算：</p>
-<p>Ai​&#x3D;(1−pi​z−1)X(z)​z&#x3D;pi​​</p>
+<p>$$<br>Ai​&#x3D;(1−p_i​z^{−1})X(z)|_{​z&#x3D;pi}​​<br>$$</p>
 <p>对于重极点情况，计算更为复杂，需要使用求导公式。</p>
 <p><em>表：部分分式展开中极点的类型与处理方法</em></p>
 <table>
@@ -323,45 +323,46 @@
 </thead>
 <tbody><tr>
 <td><strong>单实极点</strong>​</td>
-<td>1−pi​z−1A​</td>
-<td>直接代入法：$A_i &#x3D; \left.(1-p_iz^{-1})X(z)\right</td>
+<td>$\frac{A}{1−p_i^{​ z−1}}$</td>
+<td>直接代入法：$A_i &#x3D; (1-p_iz^{-1})X(z)$</td>
 </tr>
 <tr>
 <td><strong>重实极点</strong>​</td>
-<td>1−pi​z−1A1​​+(1−pi​z−1)2A2​​+⋯</td>
-<td>求导法：Ak​&#x3D;(r−k)!1​dzr−kdr−k​[(1−pi​z−1)rX(z)]z&#x3D;pi​​</td>
+<td>$\frac{A}{1−p_i^{​ z−1}}​​+\frac{A}{(1−p_i^{​ z−1})^2}​​+⋯$</td>
+<td>求导法：$A_k​&#x3D;\frac{1}{(r−k)!}\frac{d^{r−k}}​{dz^{r−k}}[(1−p_i​z^{−1})^rX(z)]|_{z&#x3D;p_i}​​$</td>
 </tr>
 <tr>
 <td><strong>共轭复极点</strong>​</td>
-<td>1+a1​z−1+a2​z−2B0​+B1​z−1​</td>
+<td>$\frac{B_0​+B_1​z^{−1​}}{1+a_1​z^{−1}+a_2​z^{−2}}$</td>
 <td>通常使用系数比较法或分离实部虚部求解</td>
 </tr>
 </tbody></table>
 <h2 id="4-应用实例分析"><a href="#4-应用实例分析" class="headerlink" title="4. 应用实例分析"></a>4. 应用实例分析</h2><h3 id="4-1-单极点情况"><a href="#4-1-单极点情况" class="headerlink" title="4.1 单极点情况"></a>4.1 单极点情况</h3><p>考虑有理分式：</p>
-<p>X(z)&#x3D;1+z−1−6z−25z−1​</p>
-<p>分母可因式分解为：(1−2z−1)(1+3z−1)。</p>
+<p>$$<br>X(z)&#x3D;1+z−1−6z−25z−1​<br>$$</p>
+<p>分母可因式分解为：</p>
+<p>$$<br>(1−2z−1)(1+3z−1)<br>$$</p>
 <p>部分分式展开为：</p>
-<p>X(z)&#x3D;1−2z−1A​+1+3z−1B​</p>
+<p>$$<br>X(z)&#x3D;\frac{A}{1−2z^{−1}}+\frac{B}{1+3z^{−1}}<br>$$</p>
 <p>利用留数法计算系数：</p>
-<p>A&#x3D;(1−2z−1)X(z)​z&#x3D;2​&#x3D;1</p>
-<p>B&#x3D;(1+3z−1)X(z)​z&#x3D;−3​&#x3D;−1</p>
+<p>$$<br>A&#x3D;(1−2z^{−1})X(z)​|_{z&#x3D;2}​&#x3D;1<br>$$</p>
+<p>$$<br>B&#x3D;(1+3z^{−1})X(z)​|_{z&#x3D;−3}​&#x3D;−1<br>$$</p>
 <p>因此：</p>
-<p>X(z)&#x3D;1−2z−11​−1+3z−11​</p>
+<p>$$<br>X(z)&#x3D;\frac{1}{1−2z^{−1}​}−\frac{1}{1+3z^{−1}}<br>$$</p>
 <p>求逆Z变换得：</p>
-<p>x(n)&#x3D;2nu(n)−(−3)nu(n)</p>
+<p>$$<br>x(n)&#x3D;2^nu(n)−(−3)^nu(n)<br>$$</p>
 <p>其中u(n)为单位阶跃函数。</p>
 <h3 id="4-2-重极点情况"><a href="#4-2-重极点情况" class="headerlink" title="4.2 重极点情况"></a>4.2 重极点情况</h3><p>考虑含有重极点的Z变换：</p>
-<p>X(z)&#x3D;(z−2)22z​</p>
+<p>$$<br>X(z)&#x3D;\frac{2z}{(z−2)^2}<br>$$</p>
 <p>展开为：</p>
-<p>X(z)&#x3D;z−2A​+(z−2)2B​</p>
+<p>$$<br>X(z)&#x3D;\frac{A}{z−2}​+\frac{B}{(z−2)^2}<br>$$</p>
 <p>系数求解：</p>
-<p>B&#x3D;(z−2)2X(z)​z&#x3D;2​&#x3D;4</p>
+<p>$$<br>B&#x3D;(z−2)^2X(z)|_{​z&#x3D;2​}&#x3D;4<br>$$</p>
 <p>为求A，需计算：</p>
-<p>A&#x3D;dzd​[(z−2)2X(z)]​z&#x3D;2​&#x3D;2</p>
+<p>$$<br>A&#x3D;\frac{d}{dz}​[(z−2)^2X(z)]|_​{z&#x3D;2} &#x3D; 2<br>$$</p>
 <p>逆Z变换为：</p>
-<p>x(n)&#x3D;2⋅2nu(n)+n⋅2nu(n)&#x3D;(n+2)2nu(n)</p>
+<p>$$<br>x(n)&#x3D;2⋅2^nu(n)+n⋅2^nu(n)&#x3D;(n+2)2^nu(n)<br>$$</p>
 <h2 id="5-工具实现：Scipy中的residuez函数"><a href="#5-工具实现：Scipy中的residuez函数" class="headerlink" title="5. 工具实现：Scipy中的residuez函数"></a>5. 工具实现：Scipy中的residuez函数</h2><p>Python的Scipy库提供了<code>signal.residuez</code>函数，可自动完成部分分式展开。</p>
-<p><strong>函数语法</strong>：</p>
+<p><strong>函数语法</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">r, p, k = signal.residuez(b, a)</span><br></pre></td></tr></table></figure>
 
 <p>其中：</p>
@@ -381,29 +382,29 @@
 <table>
 <thead>
 <tr>
-<th>**X(z)**​</th>
+<th><strong>X(z)</strong></th>
 <th><strong>极点情况</strong>​</th>
 <th><strong>展开结果</strong>​</th>
-<th>**逆Z变换x(n)**​</th>
+<th><strong>逆Z变换x(n)</strong></th>
 </tr>
 </thead>
 <tbody><tr>
-<td>1+z−1−6z−25z−1​</td>
+<td>$\frac{5z^{−1}}{1+z^{−1}-6z^{−2}​}$</td>
 <td>单极点p1&#x3D;2, p2&#x3D;-3</td>
 <td>r&#x3D;[1, -1], p&#x3D;[2, -3]</td>
-<td>2nu(n)−(−3)nu(n)</td>
+<td>$2^nu(n)−(−3)^nu(n)$</td>
 </tr>
 <tr>
-<td>2−5z−1+2z−2−3z−1​</td>
+<td>$\frac{-3z^{−1}}{2−5z^{−1}+2z^{−2}​}$</td>
 <td>单极点p1&#x3D;0.5, p2&#x3D;2</td>
 <td>r&#x3D;[1, -1], p&#x3D;[0.5, 2]</td>
-<td>(0.5)nu(n)−2nu(n)</td>
+<td>$(0.5)^nu(n)−2^nu(n)$</td>
 </tr>
 <tr>
-<td>1−3z−1+2z−21​</td>
+<td>$\frac{1}{1−3z^{−1}+2z^{−2}​}$</td>
 <td>单极点p1&#x3D;1, p2&#x3D;2</td>
 <td>r&#x3D;[-1, 2], p&#x3D;[1, 2]</td>
-<td>−1nu(n)+2⋅2nu(n)</td>
+<td>$−1^nu(n)+2⋅2^nu(n)$</td>
 </tr>
 </tbody></table>
 <h2 id="6-收敛域的重要性"><a href="#6-收敛域的重要性" class="headerlink" title="6. 收敛域的重要性"></a>6. 收敛域的重要性</h2><p>进行部分分式展开时，必须同时考虑Z变换的<strong>收敛域</strong>（Region of Convergence, ROC），因为它决定了逆变换得到的序列是左边序列、右边序列还是双边序列。</p>
@@ -436,7 +437,7 @@
 <li><p>了解计算工具（如Scipy）的使用方法</p>
 </li>
 </ul>
-<p>该方法不仅是求解逆Z变换的有效工具，也为理解系统特性、分析稳定性提供了重要视角。**</p>
+<p>该方法不仅是求解逆Z变换的有效工具，也为理解系统特性、分析稳定性提供了重要视角。</p>
 
     
 
