@@ -210,6 +210,185 @@
             
 
   
+    <article id="post-水声学—声呐参数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2025/11/17/%E6%B0%B4%E5%A3%B0%E5%AD%A6%E2%80%94%E5%A3%B0%E5%91%90%E5%8F%82%E6%95%B0/">水声学—声呐方程</a>
+	
+    </h1>
+  
+
+
+  
+  
+<a href="/2025/11/17/%E6%B0%B4%E5%A3%B0%E5%AD%A6%E2%80%94%E5%A3%B0%E5%91%90%E5%8F%82%E6%95%B0/" class="archive-article-date">
+        <time datetime="2025-11-17T12:08:21.586Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-11-17</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h2 id="一、换能器指向性指数-DI"><a href="#一、换能器指向性指数-DI" class="headerlink" title="一、换能器指向性指数$DI$"></a>一、换能器指向性指数$DI$</h2><h6 id="发射器指向性指数物理意义：测得指向性发射器辐射声场远场声轴上的声强级-10lgI-max-，同功率下无指向发射器同点上的声强级-10lg-overline-I-这两者之差就是DI"><a href="#发射器指向性指数物理意义：测得指向性发射器辐射声场远场声轴上的声强级-10lgI-max-，同功率下无指向发射器同点上的声强级-10lg-overline-I-这两者之差就是DI" class="headerlink" title="发射器指向性指数物理意义：测得指向性发射器辐射声场远场声轴上的声强级$10lgI_{max}$，同功率下无指向发射器同点上的声强级$10lg\overline{I}$这两者之差就是DI"></a>发射器指向性指数物理意义：测得指向性发射器辐射声场远场声轴上的声强级$10lgI_{max}$，同功率下无指向发射器同点上的声强级$10lg\overline{I}$这两者之差就是DI</h6><p>$$<br>DI&#x3D;10lgI_{max}-10lg\overline{I}<br>$$</p>
+<h2 id="二、声纳参数"><a href="#二、声纳参数" class="headerlink" title="二、声纳参数"></a>二、声纳参数</h2><h3 id="（1）主、被动声纳的声源级"><a href="#（1）主、被动声纳的声源级" class="headerlink" title="（1）主、被动声纳的声源级"></a>（1）主、被动声纳的声源级</h3><h4 id="1）主动声呐的声源级-SL"><a href="#1）主动声呐的声源级-SL" class="headerlink" title="1）主动声呐的声源级$SL$"></a>1）主动声呐的声源级$SL$</h4><h5 id="1-声源级的定义"><a href="#1-声源级的定义" class="headerlink" title="1.声源级的定义"></a>1.声源级的定义</h5><p>主动声呐的声源级（SL）用于描述发射声信号的强弱，定义为：</p>
+<p>$$<br>SL &#x3D; 10 \lg \left. \frac{I}{I_0} \right|_{r&#x3D;1} \qquad (1-8)<br>$$</p>
+<ul>
+<li>( I )：发射器声轴方向上，离声源声中心单位距离（通常为 1m）处的声强。</li>
+<li>( I_0 )：参考声强，水声中取均方根声压为 1μPa 的平面波声强，约 ( $6.67 \times10^{-19}$  $\text{W&#x2F;m}^2 $)。</li>
+</ul>
+<h4 id="2-声源级与辐射声功率的关系"><a href="#2-声源级与辐射声功率的关系" class="headerlink" title="2.声源级与辐射声功率的关系"></a>2.声源级与辐射声功率的关系</h4><p>发射器的声源级反映了发射器辐射声功率的大小。</p>
+<ul>
+<li><p>假设，在无吸收介质中有一个辐射声功率为 $P_a(W)$ 的点声源。此时，距离声源中心单位距离处声强为：</p>
+<p>$$<br>I_{r&#x3D;1} &#x3D; \frac{P_a}{4\pi}<br>$$</p>
+</li>
+<li><p>代入定义式，得声源级公式：</p>
+<p>$$<br>SL &#x3D; 10 \lg P_a + 170.77<br>$$</p>
+</li>
+<li><p>若发射器具有指向性指数 ( $DI_T$ )，声源级为：</p>
+<p>$$<br>SL &#x3D; 10 \lg P_a + 170.77 + DI_T<br>$$</p>
+</li>
+<li><p>根据上式，可知通过辐射声功率和指向性指数即可计算声源级。</p>
+</li>
+</ul>
+<p><strong>船用声呐典型参数：</strong></p>
+<ul>
+<li><p>辐射声功率：几百瓦至几十千瓦。</p>
+</li>
+<li><p>发射指向性指数 ( $DI_T $)：10~30 dB。</p>
+</li>
+<li><p>声源级 SL 范围：210~240 dB。</p>
+<p><strong>提高声源级的作用与限制：</strong></p>
+</li>
+<li><p><strong>作用</strong>：增大声源级可提高主动声呐作用距离，需确保噪声背景下的作用距离不小于混响限制距离。</p>
+</li>
+<li><p><strong>限制</strong>：</p>
+<ul>
+<li>原理上受混响限制。</li>
+<li>工程上受空化效应和互作用效应限制（详见 1.7 节）。</li>
+</ul>
+</li>
+</ul>
+<h4 id="1）被动声呐的声源级-SL-1"><a href="#1）被动声呐的声源级-SL-1" class="headerlink" title="1）被动声呐的声源级$SL_1$"></a>1）被动声呐的声源级$SL_1$</h4><p>被动声呐本身并不辐射声信号，目标的辐射噪声就是被动声呐的声源。</p>
+<p>其被定义为水听器声轴方向上，离目标声中心单位距离处的目标辐射噪声强度$I_N$和参考声强$I_0$之比（单位为分贝):</p>
+<p>$$<br>SL_1&#x3D;10lg(\frac{I_N}{I_0})<br>$$</p>
+<p>注意：</p>
+<p>目标辐射噪声强度的测量应该在目标远场进行，并修正至目标声中心1m处。</p>
+<h3 id="（2）传播损失TL"><a href="#（2）传播损失TL" class="headerlink" title="（2）传播损失TL"></a>（2）传播损失TL</h3><p>$$<br>TL&#x3D;10lg\frac{I_1}{I_r}<br>$$</p>
+<p>$I_1$是离声源声中心单位距离（1m）处的声强；$I_r$是距声源r处的声强。TL总为正值</p>
+<h3 id="（3）目标强度TS"><a href="#（3）目标强度TS" class="headerlink" title="（3）目标强度TS"></a>（3）目标强度TS</h3><p>定量描述目标声反射能力的强弱，它定义为：</p>
+<p>$$<br>TS&#x3D;10lg\frac{I_r}{I_i}|_{r&#x3D;1}<br>$$</p>
+<p>$I_i$是目标处入射平面波强度；$I_r|_{r&#x3D;1}$是在入射声波相反方向上、离目标等效声中心1m处的回声强度。</p>
+<h3 id="（4）海洋环境噪声级NL"><a href="#（4）海洋环境噪声级NL" class="headerlink" title="（4）海洋环境噪声级NL"></a>（4）海洋环境噪声级NL</h3><p>顾名思义，用来度量环境噪声强弱的的一个量，它定义为：</p>
+<p>$$<br>TL&#x3D;10lg\frac{I_N}{I_0}<br>$$</p>
+<p>式中，I_0是参考声强；I_N是测量带宽内的噪声强度。如测量带宽为1Hz，则这样的NL称为环境噪声谱级，它是工程上的一个常用量。</p>
+<p>海洋环境噪声是一个随机量，为了方便，往往假定其为平稳的，各项同性的，并具有高斯型分布函数。</p>
+<h3 id="（5）等效平面波混响级RL"><a href="#（5）等效平面波混响级RL" class="headerlink" title="（5）等效平面波混响级RL"></a>（5）等效平面波混响级RL</h3><p>用平面波的声强级来度量混响场的强弱。它定义为：</p>
+<p>$$<br>RL&#x3D;10lg\frac{I}{I_0}<br>$$</p>
+<p>式中，$I$为平面波强度；$I_0$为参考声强</p>
+<p>物理上，有强度I的平面波，轴向入射到水听器上，水听器输出某一电压值。再将此水听器放置在混响场中，使它的声轴指向目标，在混响作用下，水听器也输出一个电压值。如果这俩个输出相等，那么就用该平面波的声强级来度量混响场的强弱</p>
+<h3 id="（6）检测阀DT"><a href="#（6）检测阀DT" class="headerlink" title="（6）检测阀DT"></a>（6）检测阀DT</h3><p>设备刚好能完成预定职能所需的处理器输入端的信噪比，定义为：</p>
+<p>$$<br>DT&#x3D;10lg\frac{刚好完成职能的信号功率}{输出端上的噪声功率}<br>$$</p>
+<h2 id="三、主动声呐方程和被动声呐方程"><a href="#三、主动声呐方程和被动声呐方程" class="headerlink" title="三、主动声呐方程和被动声呐方程"></a>三、主动声呐方程和被动声呐方程</h2><h3 id="（1）基本考虑"><a href="#（1）基本考虑" class="headerlink" title="（1）基本考虑"></a>（1）基本考虑</h3><p>                                                    信号级-背景干扰级&#x3D;检测阈</p>
+<p>此时设备刚刚好能完成预定的职能。通常将上式作为组成声呐方程的基本原则。</p>
+<h3 id="（2）主动声呐方程"><a href="#（2）主动声呐方程" class="headerlink" title="（2）主动声呐方程"></a>（2）主动声呐方程</h3><p>                                    $SL-2TL+TS-(NL-DI)&#x3D;DT$</p>
+<p>适用于收发合置声呐。此外，仅适用于背景干扰为各向同性的环境噪声情况。但是，对于主动声呐，混响也是它的背景干扰，而混响是非各向同性的，<strong>因而，当混响成为主要背景干扰时，应用等效平面波混响级RL代替各向同性背景干扰（NL-DI)。</strong></p>
+<p>$$<br>SL-2TL+TS-RL&#x3D;DT<br>$$</p>
+<h3 id="（3）被动声呐方程"><a href="#（3）被动声呐方程" class="headerlink" title="（3）被动声呐方程"></a>（3）被动声呐方程</h3><p>$$<br>SL-TL-(NL-DI)&#x3D;DT<br>$$</p>
+<p>被动声呐，不存在混响干扰。</p>
+<h2 id="四、组合声呐参数"><a href="#四、组合声呐参数" class="headerlink" title="四、组合声呐参数"></a>四、组合声呐参数</h2><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>表达式</th>
+<th>物理意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>回声信号级</td>
+<td>SL-2TL+TS</td>
+<td>加到主动声呐接收换能器上的回声信号的声级</td>
+</tr>
+<tr>
+<td>噪声掩蔽级</td>
+<td>NL-DI+DT</td>
+<td>工作在噪声干扰中的主动声呐设备正常工作所需的最低信号级</td>
+</tr>
+<tr>
+<td>混响掩蔽级</td>
+<td>RL+DT</td>
+<td>工作在混响干扰中的主动声呐设备正常工作所需的最低信号级</td>
+</tr>
+<tr>
+<td>回声余量</td>
+<td>SL_2TL+TS-(NL-DI+DT)</td>
+<td>主动声呐回声级超过噪声掩蔽级的数量</td>
+</tr>
+<tr>
+<td>优质因数</td>
+<td>SL-(NL-DI+DT)</td>
+<td></td>
+</tr>
+<tr>
+<td>品质因数</td>
+<td>SL-(NL_DI)</td>
+<td>在水听器输出端测得的声源级和噪声级之差</td>
+</tr>
+</tbody></table>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2025/11/17/%E6%B0%B4%E5%A3%B0%E5%AD%A6%E2%80%94%E5%A3%B0%E5%91%90%E5%8F%82%E6%95%B0/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-部分分式展开法概述" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
