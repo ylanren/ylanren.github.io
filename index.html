@@ -222,7 +222,7 @@
     <b>✦</b>
   </div>
   <div class="hero-stats" aria-label="网站摘要">
-    <div><strong>6</strong><span>篇记录</span></div>
+    <div><strong>7</strong><span>篇记录</span></div>
     <div><strong>1</strong><span>个分类</span></div>
     <div><strong>ON</strong><span>持续更新</span></div>
   </div>
@@ -231,9 +231,566 @@
 <section class="home-stream" id="latest-notes" aria-labelledby="latest-notes-title">
   <div class="stream-heading">
     <div><p>RECENT ENTRIES</p><h2 id="latest-notes-title">最近更新</h2></div>
-    <span>✦ 6 NOTES</span>
+    <span>✦ 7 NOTES</span>
   </div>
   
+  
+    <article id="post-模态分解2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2026/08/29/%E6%A8%A1%E6%80%81%E5%88%86%E8%A7%A32/" target="_blank">模态分解2</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2026/08/29/%E6%A8%A1%E6%80%81%E5%88%86%E8%A7%A32/" class="archive-article-date">
+        <time datetime="2026-08-29T12:49:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2026-08-29</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p>模态分解建立在基本的信号分析理论之上。理解时域、频域、傅里叶变换、FFT、非平稳信号以及时频分析，是后续学习 EMD、HHT 和 VMD 的基础。</p>
+<hr>
+<h2 id="1-时域信号"><a href="#1-时域信号" class="headerlink" title="1. 时域信号"></a>1. 时域信号</h2><p>实际传感器采集的信号，本质上都是某个物理量随时间的变化。</p>
+<p>例如：</p>
+<ul>
+<li>水听器测量声压：$p(t)$</li>
+<li>加速度传感器测量振动：$a(t)$</li>
+<li>位移传感器测量位移：$x(t)$</li>
+</ul>
+<p>数字采样后，连续信号变为离散序列：</p>
+<p>$$<br>x[0],x[1],x[2],\dots,x[N-1]<br>$$</p>
+<h3 id="1-1-时域描述的信息"><a href="#1-1-时域描述的信息" class="headerlink" title="1.1 时域描述的信息"></a>1.1 时域描述的信息</h3><p>时域信号主要反映：</p>
+<ul>
+<li>某一时刻的幅值；</li>
+<li>是否存在周期性；</li>
+<li>是否存在冲击；</li>
+<li>是否存在趋势；</li>
+<li>是否发生突变；</li>
+<li>信号随时间的整体变化规律。</li>
+</ul>
+<p>对于简单正弦信号：</p>
+<p>$$<br>x(t)&#x3D;A\sin(2\pi ft+\phi)<br>$$</p>
+<p>其中：</p>
+<ul>
+<li>$A$：振幅；</li>
+<li>$f$：频率；</li>
+<li>$\phi$：初相位。</li>
+</ul>
+<hr>
+<h2 id="2-频率与周期"><a href="#2-频率与周期" class="headerlink" title="2. 频率与周期"></a>2. 频率与周期</h2><p>频率表示单位时间内完成振荡的次数，单位为 Hz。</p>
+<p>周期 $T$ 与频率 $f$ 的关系为：</p>
+<p>$$<br>T&#x3D;\frac{1}{f}<br>$$</p>
+<p>或：</p>
+<p>$$<br>f&#x3D;\frac{1}{T}<br>$$</p>
+<p>例如：</p>
+<p>$$<br>f&#x3D;10\text{ Hz}<br>$$</p>
+<p>则：</p>
+<p>$$<br>T&#x3D;0.1\text{ s}<br>$$</p>
+<p>表示信号每 0.1 秒完成一次完整振荡。</p>
+<hr>
+<h2 id="3-为什么需要频域分析"><a href="#3-为什么需要频域分析" class="headerlink" title="3. 为什么需要频域分析"></a>3. 为什么需要频域分析</h2><p>对于：</p>
+<p>$$<br>x(t)&#x3D;\sin(2\pi10t)+0.5\sin(2\pi50t)<br>$$</p>
+<p>时域波形已经比单一正弦波复杂，但其组成实际上很简单：</p>
+<p>$$<br>x(t)&#x3D;u_1(t)+u_2(t)<br>$$</p>
+<p>其中：</p>
+<p>$$<br>u_1(t)&#x3D;\sin(2\pi10t)<br>$$</p>
+<p>$$<br>u_2(t)&#x3D;0.5\sin(2\pi50t)<br>$$</p>
+<p>频域可以直接显示信号包含 10 Hz 和 50 Hz 两个主要频率成分。</p>
+<p>因此可以概括为：</p>
+<blockquote>
+<p><strong>时域描述“信号如何随时间变化”，频域描述“信号由哪些频率组成”。</strong></p>
+</blockquote>
+<hr>
+<h2 id="4-Fourier-Transform"><a href="#4-Fourier-Transform" class="headerlink" title="4. Fourier Transform"></a>4. Fourier Transform</h2><p>傅里叶分析的核心思想是：</p>
+<blockquote>
+<p>一个复杂信号可以表示为大量不同频率的正弦和余弦成分的叠加。</p>
+</blockquote>
+<p>连续傅里叶变换定义为：</p>
+<p>$$<br>X(f)&#x3D;\int_{-\infty}^{+\infty}x(t)e^{-j2\pi ft},dt<br>$$</p>
+<p>反变换为：</p>
+<p>$$<br>x(t)&#x3D;\int_{-\infty}^{+\infty}X(f)e^{j2\pi ft},df<br>$$</p>
+<p>因此：</p>
+<p>$$<br>x(t)\longleftrightarrow X(f)<br>$$</p>
+<p>其中：</p>
+<ul>
+<li>$x(t)$：时域表示；</li>
+<li>$X(f)$：频域表示。</li>
+</ul>
+<hr>
+<h2 id="5-Fourier-Transform-的直观意义"><a href="#5-Fourier-Transform-的直观意义" class="headerlink" title="5. Fourier Transform 的直观意义"></a>5. Fourier Transform 的直观意义</h2><p>傅里叶变换可以理解为：</p>
+<blockquote>
+<p>用不同频率的复指数函数与原信号进行匹配，判断原信号中含有多少该频率成分。</p>
+</blockquote>
+<p>复指数：</p>
+<p>$$<br>e^{j\theta}&#x3D;\cos\theta+j\sin\theta<br>$$</p>
+<p>同时包含正弦和余弦信息，因此傅里叶变换不仅可以表示频率成分强弱，也能够记录相位信息。</p>
+<p>一般：</p>
+<p>$$<br>X(f)&#x3D;a(f)+jb(f)<br>$$</p>
+<p>由此可以得到：</p>
+<h3 id="幅度谱"><a href="#幅度谱" class="headerlink" title="幅度谱"></a>幅度谱</h3><p>$$<br>|X(f)|<br>$$</p>
+<p>表示某一频率成分的强弱。</p>
+<h3 id="相位谱"><a href="#相位谱" class="headerlink" title="相位谱"></a>相位谱</h3><p>$$<br>\phi(f)&#x3D;\arg[X(f)]<br>$$</p>
+<p>表示该频率成分的相位。</p>
+<hr>
+<h2 id="6-DFT-与-FFT"><a href="#6-DFT-与-FFT" class="headerlink" title="6. DFT 与 FFT"></a>6. DFT 与 FFT</h2><p>实际采集的数据是离散信号，因此通常使用离散傅里叶变换 DFT：</p>
+<p>$$<br>X[k]&#x3D;\sum_{n&#x3D;0}^{N-1}x[n]e^{-j2\pi kn&#x2F;N}<br>$$</p>
+<p>其中：</p>
+<p>$$<br>k&#x3D;0,1,\dots,N-1<br>$$</p>
+<p>FFT 的全称为 Fast Fourier Transform，即快速傅里叶变换。</p>
+<p>需要明确：</p>
+<blockquote>
+<p><strong>FFT 不是一种新的数学变换，而是快速计算 DFT 的算法。</strong></p>
+</blockquote>
+<p>直接计算 DFT 的复杂度约为：</p>
+<p>$$<br>O(N^2)<br>$$</p>
+<p>FFT 可以降低至：</p>
+<p>$$<br>O(N\log N)<br>$$</p>
+<p>因此工程中的频谱分析通常使用 FFT。</p>
+<hr>
+<h2 id="7-采样频率"><a href="#7-采样频率" class="headerlink" title="7. 采样频率"></a>7. 采样频率</h2><p>连续信号经过采样后：</p>
+<p>$$<br>x[n]&#x3D;x(nT_s)<br>$$</p>
+<p>其中 $T_s$ 为采样周期。</p>
+<p>采样频率为：</p>
+<p>$$<br>f_s&#x3D;\frac{1}{T_s}<br>$$</p>
+<p>例如：</p>
+<p>$$<br>f_s&#x3D;20000\text{ Hz}<br>$$</p>
+<p>表示每秒采集 20000 个数据点。</p>
+<hr>
+<h2 id="8-Nyquist-采样定理"><a href="#8-Nyquist-采样定理" class="headerlink" title="8. Nyquist 采样定理"></a>8. Nyquist 采样定理</h2><p>为了避免频谱混叠，采样频率理论上应满足：</p>
+<p>$$<br>f_s&gt;2f_{\max}<br>$$</p>
+<p>等价地：</p>
+<p>$$<br>f_{\max}&lt;\frac{f_s}{2}<br>$$</p>
+<p>Nyquist 频率定义为：</p>
+<p>$$<br>f_N&#x3D;\frac{f_s}{2}<br>$$</p>
+<p>例如：</p>
+<p>$$<br>f_s&#x3D;20\text{ kHz}<br>$$</p>
+<p>则：</p>
+<p>$$<br>f_N&#x3D;10\text{ kHz}<br>$$</p>
+<p>理论上可无混叠表示的最高频率不能超过 10 kHz。</p>
+<hr>
+<h2 id="9-频谱混叠"><a href="#9-频谱混叠" class="headerlink" title="9. 频谱混叠"></a>9. 频谱混叠</h2><p>如果信号频率超过 Nyquist 频率，采样后可能被错误映射为另一个较低频率，这种现象称为：</p>
+<blockquote>
+<p><strong>Aliasing，频谱混叠。</strong></p>
+</blockquote>
+<p>避免混叠通常需要：</p>
+<ol>
+<li>提高采样频率；</li>
+<li>在采样前使用抗混叠低通滤波器。</li>
+</ol>
+<hr>
+<h2 id="10-FFT-的频率分辨率"><a href="#10-FFT-的频率分辨率" class="headerlink" title="10. FFT 的频率分辨率"></a>10. FFT 的频率分辨率</h2><p>若采样频率为：</p>
+<p>$$<br>f_s<br>$$</p>
+<p>采样点数为：</p>
+<p>$$<br>N<br>$$</p>
+<p>则总采样时长：</p>
+<p>$$<br>T&#x3D;\frac{N}{f_s}<br>$$</p>
+<p>FFT 的频率间隔为：</p>
+<p>$$<br>\Delta f&#x3D;\frac{f_s}{N}<br>$$</p>
+<p>由于：</p>
+<p>$$<br>T&#x3D;\frac{N}{f_s}<br>$$</p>
+<p>因此：</p>
+<p>$$<br>\boxed{<br>\Delta f&#x3D;\frac{1}{T}<br>}<br>$$</p>
+<p>这说明：</p>
+<blockquote>
+<p><strong>频率分辨率主要由观测时间长度决定。</strong></p>
+</blockquote>
+<hr>
+<h2 id="11-采样率与频率分辨率的区别"><a href="#11-采样率与频率分辨率的区别" class="headerlink" title="11. 采样率与频率分辨率的区别"></a>11. 采样率与频率分辨率的区别</h2><p>一个常见误区是：</p>
+<blockquote>
+<p>提高采样率一定能够提高频率分辨率。</p>
+</blockquote>
+<p>实际上：</p>
+<p>$$<br>\Delta f&#x3D;\frac{f_s}{N}&#x3D;\frac{1}{T}<br>$$</p>
+<p>如果观测时间 $T$ 不变，仅提高采样率并同步增加采样点数，则频率分辨率并不会改善。</p>
+<p>更准确地说：</p>
+<ul>
+<li><strong>采样率主要决定可分析的最高频率范围；</strong></li>
+<li><strong>观测时长主要决定频率分辨率。</strong></li>
+</ul>
+<hr>
+<h2 id="12-频谱泄漏"><a href="#12-频谱泄漏" class="headerlink" title="12. 频谱泄漏"></a>12. 频谱泄漏</h2><p>FFT 默认截取的数据会周期性重复。</p>
+<p>若采样窗口不能包含整数个信号周期，则窗口首尾可能出现不连续。</p>
+<p>这种不连续会使原本集中的单一频率能量扩散到邻近频率中，这种现象称为：</p>
+<blockquote>
+<p><strong>Spectral Leakage，频谱泄漏。</strong></p>
+</blockquote>
+<hr>
+<h2 id="13-窗函数"><a href="#13-窗函数" class="headerlink" title="13. 窗函数"></a>13. 窗函数</h2><p>为了减弱截断造成的边界不连续，可以对原始数据乘以窗函数：</p>
+<p>$$<br>x_w[n]&#x3D;x[n]w[n]<br>$$</p>
+<p>常见窗函数包括：</p>
+<ul>
+<li>Hann Window</li>
+<li>Hamming Window</li>
+<li>Blackman Window</li>
+</ul>
+<p>窗函数通常能够减小旁瓣和频谱泄漏，但会增加主瓣宽度，因此存在：</p>
+<blockquote>
+<p><strong>泄漏抑制与频率分辨能力之间的权衡。</strong></p>
+</blockquote>
+<hr>
+<h2 id="14-平稳信号与非平稳信号"><a href="#14-平稳信号与非平稳信号" class="headerlink" title="14. 平稳信号与非平稳信号"></a>14. 平稳信号与非平稳信号</h2><h3 id="14-1-平稳信号"><a href="#14-1-平稳信号" class="headerlink" title="14.1 平稳信号"></a>14.1 平稳信号</h3><p>工程上可以粗略理解为：</p>
+<blockquote>
+<p>信号的统计特性或频率结构在观测时间内基本保持稳定。</p>
+</blockquote>
+<p>例如：</p>
+<p>$$<br>x(t)&#x3D;\sin(2\pi50t)<br>$$</p>
+<p>其频率始终保持 50 Hz。</p>
+<h3 id="14-2-非平稳信号"><a href="#14-2-非平稳信号" class="headerlink" title="14.2 非平稳信号"></a>14.2 非平稳信号</h3><p>如果信号的频率、振幅、能量或统计特性随时间发生明显变化，则属于非平稳信号。</p>
+<p>例如：</p>
+<p>$$<br>x(t)&#x3D;<br>\begin{cases}<br>\sin(2\pi10t), &amp; 0\le t&lt;1\<br>\sin(2\pi30t), &amp; 1\le t&lt;2\<br>\sin(2\pi60t), &amp; 2\le t&lt;3<br>\end{cases}<br>$$</p>
+<p>整个信号包含 10 Hz、30 Hz 和 60 Hz，但不同频率出现在不同时间段。</p>
+<hr>
+<h2 id="15-FFT-对非平稳信号的局限"><a href="#15-FFT-对非平稳信号的局限" class="headerlink" title="15. FFT 对非平稳信号的局限"></a>15. FFT 对非平稳信号的局限</h2><p>对上述非平稳信号进行整段 FFT，可以看到：</p>
+<ul>
+<li>10 Hz；</li>
+<li>30 Hz；</li>
+<li>60 Hz。</li>
+</ul>
+<p>但无法直接判断这些频率分别在什么时候出现。</p>
+<p>因此普通 FFT 更适合描述：</p>
+<blockquote>
+<p><strong>整个观测时间内的总体频率组成。</strong></p>
+</blockquote>
+<p>如果需要同时分析时间与频率，就需要时频分析方法。</p>
+<hr>
+<h2 id="16-STFT：短时傅里叶变换"><a href="#16-STFT：短时傅里叶变换" class="headerlink" title="16. STFT：短时傅里叶变换"></a>16. STFT：短时傅里叶变换</h2><p>STFT 的基本思想是：</p>
+<blockquote>
+<p>将长信号划分为多个短时间窗口，并分别对每个窗口进行 Fourier Transform。</p>
+</blockquote>
+<p>定义为：</p>
+<p>$$<br>STFT_x(\tau,f)&#x3D;\int_{-\infty}^{+\infty}x(t)w(t-\tau)e^{-j2\pi ft},dt<br>$$</p>
+<p>其中：</p>
+<ul>
+<li>$w(t-\tau)$：以 $\tau$ 为中心的滑动窗；</li>
+<li>$f$：分析频率。</li>
+</ul>
+<p>STFT 最终得到：</p>
+<p>$$<br>X(t,f)<br>$$</p>
+<p>从而同时描述时间和频率。</p>
+<hr>
+<h2 id="17-STFT-的时间—频率分辨率矛盾"><a href="#17-STFT-的时间—频率分辨率矛盾" class="headerlink" title="17. STFT 的时间—频率分辨率矛盾"></a>17. STFT 的时间—频率分辨率矛盾</h2><p>STFT 使用固定长度窗口，因此存在固有的分辨率权衡。</p>
+<h3 id="长窗口"><a href="#长窗口" class="headerlink" title="长窗口"></a>长窗口</h3><ul>
+<li>频率分辨率更好；</li>
+<li>时间定位能力下降。</li>
+</ul>
+<h3 id="短窗口"><a href="#短窗口" class="headerlink" title="短窗口"></a>短窗口</h3><ul>
+<li>时间定位更精确；</li>
+<li>频率分辨率下降。</li>
+</ul>
+<p>因此：</p>
+<p>$$<br>\boxed{<br>\text{STFT 无法同时任意提高时间分辨率和频率分辨率}<br>}<br>$$</p>
+<hr>
+<h2 id="18-Wavelet：多尺度分析"><a href="#18-Wavelet：多尺度分析" class="headerlink" title="18. Wavelet：多尺度分析"></a>18. Wavelet：多尺度分析</h2><p>STFT 使用固定窗口，而实际信号中：</p>
+<ul>
+<li>高频成分变化更快；</li>
+<li>低频成分变化更慢。</li>
+</ul>
+<p>小波分析通过尺度变化实现多分辨率分析。</p>
+<p>其基本思想是：</p>
+<ul>
+<li>高频：使用较短时间窗口；</li>
+<li>低频：使用较长时间窗口。</li>
+</ul>
+<p>因此 Wavelet 特别适合：</p>
+<ul>
+<li>瞬态信号；</li>
+<li>冲击信号；</li>
+<li>多尺度信号；</li>
+<li>非平稳信号。</li>
+</ul>
+<hr>
+<h2 id="19-Wavelet-的局限"><a href="#19-Wavelet-的局限" class="headerlink" title="19. Wavelet 的局限"></a>19. Wavelet 的局限</h2><p>虽然小波变换比 STFT 更灵活，但仍然需要预先选择母小波，例如：</p>
+<ul>
+<li>Morlet；</li>
+<li>Daubechies；</li>
+<li>Symlet；</li>
+<li>Coiflet。</li>
+</ul>
+<p>因此其分析结果在一定程度上依赖于：</p>
+<blockquote>
+<p><strong>人为选择的基函数。</strong></p>
+</blockquote>
+<hr>
+<h2 id="20-从-Fourier-到-EMD-的发展逻辑"><a href="#20-从-Fourier-到-EMD-的发展逻辑" class="headerlink" title="20. 从 Fourier 到 EMD 的发展逻辑"></a>20. 从 Fourier 到 EMD 的发展逻辑</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Fourier</span><br><span class="line">  │</span><br><span class="line">  └─ 固定正弦/余弦基</span><br><span class="line">        ↓</span><br><span class="line">STFT</span><br><span class="line">  │</span><br><span class="line">  └─ 局部 Fourier + 固定窗口</span><br><span class="line">        ↓</span><br><span class="line">Wavelet</span><br><span class="line">  │</span><br><span class="line">  └─ 多尺度基函数</span><br><span class="line">        ↓</span><br><span class="line">EMD</span><br><span class="line">  │</span><br><span class="line">  └─ 根据数据本身自适应提取模态</span><br></pre></td></tr></table></figure>
+
+<p>EMD 的重要特点是：</p>
+<blockquote>
+<p><strong>不预先规定固定的基函数，而是根据数据自身的局部振荡特征进行分解。</strong></p>
+</blockquote>
+<hr>
+<h2 id="21-局部振荡与瞬时频率"><a href="#21-局部振荡与瞬时频率" class="headerlink" title="21. 局部振荡与瞬时频率"></a>21. 局部振荡与瞬时频率</h2><p>对于一般的调幅调频信号：</p>
+<p>$$<br>x(t)&#x3D;A(t)\cos[\phi(t)]<br>$$</p>
+<p>其中：</p>
+<ul>
+<li>$A(t)$：瞬时幅值；</li>
+<li>$\phi(t)$：瞬时相位。</li>
+</ul>
+<p>瞬时角频率定义为：</p>
+<p>$$<br>\omega(t)&#x3D;\frac{d\phi(t)}{dt}<br>$$</p>
+<p>瞬时频率为：</p>
+<p>$$<br>\boxed{<br>f(t)&#x3D;\frac{1}{2\pi}\frac{d\phi(t)}{dt}<br>}<br>$$</p>
+<p>瞬时频率是后续理解 Hilbert Transform、HHT 和 VMD 的重要基础。</p>
+<hr>
+<h2 id="22-FFT、STFT、Wavelet、EMD-与-VMD-对比"><a href="#22-FFT、STFT、Wavelet、EMD-与-VMD-对比" class="headerlink" title="22. FFT、STFT、Wavelet、EMD 与 VMD 对比"></a>22. FFT、STFT、Wavelet、EMD 与 VMD 对比</h2><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>核心思想</th>
+<th align="right">时间信息</th>
+<th>基函数&#x2F;分解方式</th>
+<th>主要特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>FFT</td>
+<td>整体 Fourier 分析</td>
+<td align="right">否</td>
+<td>正弦&#x2F;余弦</td>
+<td>适合整体频谱分析</td>
+</tr>
+<tr>
+<td>STFT</td>
+<td>滑动窗口内 Fourier 分析</td>
+<td align="right">是</td>
+<td>正弦 + 固定窗</td>
+<td>局部时频分析</td>
+</tr>
+<tr>
+<td>Wavelet</td>
+<td>多尺度分析</td>
+<td align="right">是</td>
+<td>母小波</td>
+<td>适合瞬态和多尺度信号</td>
+</tr>
+<tr>
+<td>EMD</td>
+<td>数据驱动提取局部模态</td>
+<td align="right">可结合 HHT</td>
+<td>数据自身决定</td>
+<td>自适应、适合非平稳信号</td>
+</tr>
+<tr>
+<td>VMD</td>
+<td>变分优化提取有限带宽模态</td>
+<td align="right">可进一步分析</td>
+<td>优化得到</td>
+<td>中心频率明确、优化式分解</td>
+</tr>
+</tbody></table>
+<p>这些方法不是简单的优劣递进关系，而是适用于不同问题。</p>
+<hr>
+<h2 id="23-FFT、滤波与模态分解的区别"><a href="#23-FFT、滤波与模态分解的区别" class="headerlink" title="23. FFT、滤波与模态分解的区别"></a>23. FFT、滤波与模态分解的区别</h2><h3 id="FFT"><a href="#FFT" class="headerlink" title="FFT"></a>FFT</h3><p>主要回答：</p>
+<blockquote>
+<p>信号中包含哪些频率？</p>
+</blockquote>
+<h3 id="Filter"><a href="#Filter" class="headerlink" title="Filter"></a>Filter</h3><p>主要回答：</p>
+<blockquote>
+<p>已知需要某个频段，如何保留或抑制它？</p>
+</blockquote>
+<h3 id="Mode-Decomposition"><a href="#Mode-Decomposition" class="headerlink" title="Mode Decomposition"></a>Mode Decomposition</h3><p>主要回答：</p>
+<blockquote>
+<p>在不知道所有具体频带的情况下，能否根据数据自身结构自适应地提取多个振荡成分？</p>
+</blockquote>
+<p>可以概括为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">FFT</span><br><span class="line">→ 分析频率组成</span><br><span class="line"></span><br><span class="line">Filter</span><br><span class="line">→ 人工指定频带</span><br><span class="line"></span><br><span class="line">Mode Decomposition</span><br><span class="line">→ 自适应寻找信号成分</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="24-高频成分不一定是噪声"><a href="#24-高频成分不一定是噪声" class="headerlink" title="24. 高频成分不一定是噪声"></a>24. 高频成分不一定是噪声</h2><p>模态分解得到多个 IMF 后，不能简单认为：</p>
+<blockquote>
+<p>高频 IMF &#x3D; 噪声。</p>
+</blockquote>
+<p>如果目标信号主要位于较高频段，而环境噪声集中于低频，那么高频模态反而可能包含主要目标信息。</p>
+<p>模态筛选应结合：</p>
+<ul>
+<li>目标频带；</li>
+<li>模态能量；</li>
+<li>相关性；</li>
+<li>中心频率；</li>
+<li>时频特征；</li>
+<li>实验条件；</li>
+<li>理论模型。</li>
+</ul>
+<hr>
+<h2 id="25-水声与振动信号中的非平稳性"><a href="#25-水声与振动信号中的非平稳性" class="headerlink" title="25. 水声与振动信号中的非平稳性"></a>25. 水声与振动信号中的非平稳性</h2><p>实际水声、机械振动和泄漏信号通常同时包含多个过程，例如：</p>
+<p>$$<br>x(t)&#x3D;s_{\text{target}}(t)+s_{\text{bubble}}(t)+s_{\text{structure}}(t)+s_{\text{interference}}(t)+n(t)<br>$$</p>
+<p>这些成分可能具有不同的：</p>
+<ul>
+<li>频率；</li>
+<li>时间尺度；</li>
+<li>稳定性；</li>
+<li>能量；</li>
+<li>瞬态特征。</li>
+</ul>
+<p>因此模态分解的主要目的不是简单去除高频噪声，而是：</p>
+<blockquote>
+<p><strong>将复杂混合信号拆分为若干更容易分析和处理的振荡成分。</strong></p>
+</blockquote>
+<hr>
+<h2 id="26-方法选择原则"><a href="#26-方法选择原则" class="headerlink" title="26. 方法选择原则"></a>26. 方法选择原则</h2><p>信号处理方法应根据问题选择。</p>
+<p>推荐逻辑：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">信号特性</span><br><span class="line">   ↓</span><br><span class="line">研究目标</span><br><span class="line">   ↓</span><br><span class="line">方法选择</span><br></pre></td></tr></table></figure>
+
+<p>典型选择：</p>
+<table>
+<thead>
+<tr>
+<th>研究目标</th>
+<th>常用方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>整体频率组成</td>
+<td>FFT</td>
+</tr>
+<tr>
+<td>频率随时间变化</td>
+<td>STFT</td>
+</tr>
+<tr>
+<td>瞬态、多尺度分析</td>
+<td>Wavelet</td>
+</tr>
+<tr>
+<td>自适应局部振荡分解</td>
+<td>EMD</td>
+</tr>
+<tr>
+<td>有限带宽模态优化分解</td>
+<td>VMD</td>
+</tr>
+</tbody></table>
+<p>当信号具有以下特征时，可以重点考虑模态分解：</p>
+<ul>
+<li>非平稳；</li>
+<li>多时间尺度；</li>
+<li>多频带混合；</li>
+<li>瞬态明显；</li>
+<li>低信噪比；</li>
+<li>多个物理过程叠加。</li>
+</ul>
+<hr>
+<h2 id="27-本节核心公式"><a href="#27-本节核心公式" class="headerlink" title="27. 本节核心公式"></a>27. 本节核心公式</h2><h3 id="周期与频率"><a href="#周期与频率" class="headerlink" title="周期与频率"></a>周期与频率</h3><p>$$<br>T&#x3D;\frac{1}{f}<br>$$</p>
+<h3 id="采样频率"><a href="#采样频率" class="headerlink" title="采样频率"></a>采样频率</h3><p>$$<br>f_s&#x3D;\frac{1}{T_s}<br>$$</p>
+<h3 id="Nyquist-频率"><a href="#Nyquist-频率" class="headerlink" title="Nyquist 频率"></a>Nyquist 频率</h3><p>$$<br>f_N&#x3D;\frac{f_s}{2}<br>$$</p>
+<h3 id="总观测时间"><a href="#总观测时间" class="headerlink" title="总观测时间"></a>总观测时间</h3><p>$$<br>T&#x3D;\frac{N}{f_s}<br>$$</p>
+<h3 id="FFT-频率分辨率"><a href="#FFT-频率分辨率" class="headerlink" title="FFT 频率分辨率"></a>FFT 频率分辨率</h3><p>$$<br>\Delta f&#x3D;\frac{f_s}{N}&#x3D;\frac{1}{T}<br>$$</p>
+<h3 id="连续-Fourier-Transform"><a href="#连续-Fourier-Transform" class="headerlink" title="连续 Fourier Transform"></a>连续 Fourier Transform</h3><p>$$<br>X(f)&#x3D;\int_{-\infty}^{+\infty}x(t)e^{-j2\pi ft},dt<br>$$</p>
+<h3 id="DFT"><a href="#DFT" class="headerlink" title="DFT"></a>DFT</h3><p>$$<br>X[k]&#x3D;\sum_{n&#x3D;0}^{N-1}x[n]e^{-j2\pi kn&#x2F;N}<br>$$</p>
+<h3 id="STFT"><a href="#STFT" class="headerlink" title="STFT"></a>STFT</h3><p>$$<br>STFT_x(\tau,f)&#x3D;\int x(t)w(t-\tau)e^{-j2\pi ft},dt<br>$$</p>
+<h3 id="瞬时频率"><a href="#瞬时频率" class="headerlink" title="瞬时频率"></a>瞬时频率</h3><p>$$<br>f(t)&#x3D;\frac{1}{2\pi}\frac{d\phi(t)}{dt}<br>$$</p>
+<hr>
+<h2 id="28-知识主线总结"><a href="#28-知识主线总结" class="headerlink" title="28. 知识主线总结"></a>28. 知识主线总结</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">时域</span><br><span class="line">  ↓</span><br><span class="line">描述信号随时间变化</span><br><span class="line">  ↓</span><br><span class="line">Fourier Transform</span><br><span class="line">  ↓</span><br><span class="line">频域</span><br><span class="line">  ↓</span><br><span class="line">FFT / DFT</span><br><span class="line">  ↓</span><br><span class="line">整体频谱分析</span><br><span class="line">  ↓</span><br><span class="line">非平稳信号出现时间信息需求</span><br><span class="line">  ↓</span><br><span class="line">STFT</span><br><span class="line">  ↓</span><br><span class="line">时间—频率分辨率权衡</span><br><span class="line">  ↓</span><br><span class="line">Wavelet</span><br><span class="line">  ↓</span><br><span class="line">多尺度分析</span><br><span class="line">  ↓</span><br><span class="line">固定基函数仍存在限制</span><br><span class="line">  ↓</span><br><span class="line">EMD / VMD</span><br><span class="line">  ↓</span><br><span class="line">自适应模态分解</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="29-后续内容"><a href="#29-后续内容" class="headerlink" title="29. 后续内容"></a>29. 后续内容</h2><p>下一节将进入 EMD 的完整分解原理，重点包括：</p>
+<ul>
+<li>局部极值点；</li>
+<li>上下包络；</li>
+<li>三次样条插值；</li>
+<li>局部均值；</li>
+<li>Sifting；</li>
+<li>IMF 判定条件；</li>
+<li>Residual；</li>
+<li>EMD 停止准则。</li>
+</ul>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">模态分解</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">EMD</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">FFT</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">STFT</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">小波变换</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/信号处理//" class="article-tag-list-link color5">信号处理</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2026/08/29/%E6%A8%A1%E6%80%81%E5%88%86%E8%A7%A32/" target="_blank" rel="noopener">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
   
     <article id="post-模态分解1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -1515,6 +2072,18 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">VMD</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">FFT</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">STFT</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">小波变换</a>
               </li>
             
             <div class="clearfix"></div>
