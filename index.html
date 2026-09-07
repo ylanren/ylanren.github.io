@@ -222,7 +222,7 @@
     <b>✦</b>
   </div>
   <div class="hero-stats" aria-label="网站摘要">
-    <div><strong>7</strong><span>篇记录</span></div>
+    <div><strong>8</strong><span>篇记录</span></div>
     <div><strong>1</strong><span>个分类</span></div>
     <div><strong>ON</strong><span>持续更新</span></div>
   </div>
@@ -231,9 +231,255 @@
 <section class="home-stream" id="latest-notes" aria-labelledby="latest-notes-title">
   <div class="stream-heading">
     <div><p>RECENT ENTRIES</p><h2 id="latest-notes-title">最近更新</h2></div>
-    <span>✦ 7 NOTES</span>
+    <span>✦ 8 NOTES</span>
   </div>
   
+  
+    <article id="post-模态分解3：EMD 如何筛出 IMF" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2026/09/07/%E6%A8%A1%E6%80%81%E5%88%86%E8%A7%A33%EF%BC%9AEMD%20%E5%A6%82%E4%BD%95%E7%AD%9B%E5%87%BA%20IMF/" target="_blank">模态分解3：EMD 如何筛出 IMF</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2026/09/07/%E6%A8%A1%E6%80%81%E5%88%86%E8%A7%A33%EF%BC%9AEMD%20%E5%A6%82%E4%BD%95%E7%AD%9B%E5%87%BA%20IMF/" class="archive-article-date">
+        <time datetime="2026-09-07T12:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2026-09-07</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p>前两课讨论了“为什么需要模态分解”以及“为什么 FFT、STFT 和小波之后仍需要 EMD”。这一课进入第一个真正的模态分解算法：<strong>经验模态分解</strong>（Empirical Mode Decomposition，EMD）。</p>
+<p>本文只回答一个核心问题：</p>
+<blockquote>
+<p>为什么“找极值点 → 构造包络 → 求局部均值 → 相减 → 重复”能够从复杂信号中逐渐筛出一个 IMF？</p>
+</blockquote>
+<hr>
+<h2 id="从一个两尺度信号开始"><a href="#从一个两尺度信号开始" class="headerlink" title="从一个两尺度信号开始"></a>从一个两尺度信号开始</h2><p>设观测信号由一个慢振荡和一个快振荡叠加而成：</p>
+<p>$$<br>x(t)&#x3D;\sin(2\pi\cdot5t)+0.4\sin(2\pi\cdot20t)<br>$$</p>
+<p>其中 5 Hz 的周期为 $0.2\text{ s}$，20 Hz 的周期为 $0.05\text{ s}$。也就是说，快振荡在慢振荡的一个周期内会完成多次起伏。</p>
+<figure>
+  <img src="/images/emd-lesson-3/01-mixed-signal.png" alt="5 Hz 与 20 Hz 信号及其叠加结果">
+  <figcaption>图 1：5 Hz 慢振荡、20 Hz 快振荡及其叠加结果。</figcaption>
+</figure>
+
+<p>如果已知解析式，分开它们并不难。但 EMD 的出发点是：<strong>只给定 $x(t)$，不预先告诉算法频率、频带或基函数，让它根据数据自己的局部形态找出不同的振荡尺度。</strong></p>
+<p>因此，EMD 并不是“先做 FFT、找一个峰、再设计滤波器”。它首先在时域中观察局部极值的疏密：极值更密集的区域通常对应更快的局部振荡，极值更稀疏的区域通常对应更慢的变化。</p>
+<h2 id="从极值点到包络"><a href="#从极值点到包络" class="headerlink" title="从极值点到包络"></a>从极值点到包络</h2><p>对于离散信号 $x[n]$，若满足</p>
+<p>$$<br>x[n]&gt;x[n-1] \quad \text{且} \quad x[n]&gt;x[n+1]<br>$$</p>
+<p>则 $x[n]$ 是一个局部极大值；局部极小值的判定方向相反。EMD 将所有局部极大值、局部极小值分别用插值连接起来。经典实现通常使用三次样条插值，得到：</p>
+<p>$$<br>e_{\max}(t) \quad \text{和} \quad e_{\min}(t)<br>$$</p>
+<p>它们分别称为上包络和下包络。</p>
+<p>包络不是“信号的固定频带边界”，而是对<strong>当前局部振荡上下边界</strong>的一种估计。两条包络的平均值</p>
+<p>$$<br>m_1(t)&#x3D;\frac{e_{\max}(t)+e_{\min}(t)}{2}<br>$$</p>
+<p>称为局部均值。它大致描述了相对于当前快速振荡而言的局部慢变趋势。</p>
+<figure>
+  <img src="/images/emd-lesson-3/02-envelopes-and-local-mean.png" alt="上、下包络、局部均值与一次筛分">
+  <figcaption>图 2：黑点为局部极值；粉色曲线为上、下包络；橙色曲线为局部均值。</figcaption>
+</figure>
+
+<p>上图中的端点附近包络仅作示意。实际 EMD 中，端点延拓与样条插值方式会影响包络形状，也是算法结果在不同实现之间可能略有差别的原因之一。</p>
+<h2 id="Sifting：把局部均值逐次筛掉"><a href="#Sifting：把局部均值逐次筛掉" class="headerlink" title="Sifting：把局部均值逐次筛掉"></a>Sifting：把局部均值逐次筛掉</h2><p>第一轮计算后，将局部均值从原信号中减去：</p>
+<p>$$<br>h_1(t)&#x3D;x(t)-m_1(t)<br>$$</p>
+<p>直观上，这是在消除当前振荡所围绕的慢变偏置，使剩下的成分更接近围绕零轴对称的快速振荡。</p>
+<p>不过 $h_1(t)$ 往往还不够“干净”：包络可能仍不对称，局部均值可能仍偏离零。因此 EMD 把 $h_1(t)$ 当作新的输入，重新找极值、构造包络、求局部均值，再相减：</p>
+<p>$$<br>h_k(t)&#x3D;h_{k-1}(t)-m_k(t)<br>$$</p>
+<p>这个重复过程称为 <strong>Sifting（筛分）</strong>。它筛掉的并不是一个预设频段，而是“相对于当前局部振荡仍然存在的慢变趋势和偏置”。</p>
+<figure>
+  <img src="/images/emd-lesson-3/03-sifting-process.png" alt="多轮 Sifting 后的候选 IMF">
+  <figcaption>图 3：多轮 Sifting 使候选分量逐步接近局部对称振荡。</figcaption>
+</figure>
+
+<p>图中的五轮只是为说明机制而设置，实际次数需要由 IMF 条件和停止准则共同决定。筛分太少，候选分量可能仍混入慢变趋势；筛分过多，则可能破坏具有物理意义的幅值调制。</p>
+<h2 id="什么样的信号才是-IMF？"><a href="#什么样的信号才是-IMF？" class="headerlink" title="什么样的信号才是 IMF？"></a>什么样的信号才是 IMF？</h2><p>经过若干轮 Sifting，若候选信号 $h_k(t)$ 满足以下两个经典条件，就可以记为一个 IMF（Intrinsic Mode Function，本征模态函数）：</p>
+<ol>
+<li><p>极值点数 $N_e$ 与零交叉点数 $N_z$ 最多相差 1：</p>
+<p>$$<br>|N_e-N_z|\le1<br>$$</p>
+</li>
+<li><p>上、下包络的局部均值接近零：</p>
+<p>$$<br>\frac{e_{\max}(t)+e_{\min}(t)}{2}\approx0<br>$$</p>
+</li>
+</ol>
+<p>这两个条件意味着：该信号具有合理的局部振荡结构，并且大致围绕局部零均值上下摆动。于是可将其近似写成</p>
+<p>$$<br>c(t)&#x3D;A(t)\cos[\phi(t)]<br>$$</p>
+<p>其中 $A(t)$ 可以随时间变化，$\phi(t)$ 则描述局部相位。正因为如此，IMF 才适合在后续通过 Hilbert 变换讨论瞬时频率：</p>
+<p>$$<br>f(t)&#x3D;\frac{1}{2\pi}\frac{d\phi(t)}{dt}<br>$$</p>
+<p>需要特别避免一个常见误解：<strong>IMF 不是固定频率的正弦波，也不等于严格的带通滤波结果。</strong></p>
+<h2 id="一个-IMF-可以是调频信号"><a href="#一个-IMF-可以是调频信号" class="headerlink" title="一个 IMF 可以是调频信号"></a>一个 IMF 可以是调频信号</h2><p>考虑频率连续上升的 Chirp 信号：</p>
+<p>$$<br>x(t)&#x3D;\cos[2\pi(6t+9t^2)]<br>$$</p>
+<p>它的瞬时频率为：</p>
+<p>$$<br>f(t)&#x3D;6+18t<br>$$</p>
+<p>在两秒内，频率从 6 Hz 平滑变化到 42 Hz。全段 FFT 通常会给出一个较宽的频率范围；但从物理过程看，它仍然可以是同一个连续振荡模态。</p>
+<figure>
+  <img src="/images/emd-lesson-3/04-chirp-instantaneous-frequency.png" alt="调频信号及其瞬时频率">
+  <figcaption>图 4：一个 IMF 可以包含连续变化的瞬时频率。</figcaption>
+</figure>
+
+<p>这正是 EMD 的吸引力之一：它依据局部时间尺度工作，能够用一个 IMF 表达调幅、调频和非平稳的振荡过程，而不强迫每个成分都对应单一 Fourier 频率。</p>
+<h2 id="两层循环：一个-IMF-与多个-IMF"><a href="#两层循环：一个-IMF-与多个-IMF" class="headerlink" title="两层循环：一个 IMF 与多个 IMF"></a>两层循环：一个 IMF 与多个 IMF</h2><p>EMD 中有两层容易混淆的循环。</p>
+<p>**内循环是 Sifting。**它的目标是从当前信号中筛出一个满足 IMF 条件的分量：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">当前信号 h</span><br><span class="line">  ↓</span><br><span class="line">找局部极大值和极小值</span><br><span class="line">  ↓</span><br><span class="line">构造上、下包络</span><br><span class="line">  ↓</span><br><span class="line">计算局部均值 m</span><br><span class="line">  ↓</span><br><span class="line">h ← h − m</span><br><span class="line">  ↓</span><br><span class="line">满足 IMF 条件与停止准则？</span><br></pre></td></tr></table></figure>
+
+<p>**外循环是分解。**得到第一个 IMF 后，将它从原始信号中剥离：</p>
+<p>$$<br>c_1(t)&#x3D;h_k(t), \qquad r_1(t)&#x3D;x(t)-c_1(t)<br>$$</p>
+<p>再把残余 $r_1(t)$ 作为新输入，重复内循环，依次获得 $c_2(t),c_3(t),\ldots$。最终满足：</p>
+<p>$$<br>x(t)&#x3D;\sum_{k&#x3D;1}^{K}c_k(t)+r_K(t)<br>$$</p>
+<p>其中 $r_K(t)$ 是最终残余，常表现为慢变化趋势或无法再形成完整振荡的部分。由这个递推构造可知，EMD 天然具有加性重构关系；数值实现中只会受到浮点误差等影响。</p>
+<h2 id="Sifting-何时停止？"><a href="#Sifting-何时停止？" class="headerlink" title="Sifting 何时停止？"></a>Sifting 何时停止？</h2><p>Sifting 不能无限进行。一种常见的判断方法是比较相邻两次结果：</p>
+<p>$$<br>SD&#x3D;\sum_t\frac{|h_{k-1}(t)-h_k(t)|^2}{h_{k-1}^2(t)}<br>$$</p>
+<p>当 $SD&lt;\varepsilon$ 时，说明继续筛分带来的变化已经足够小，可以停止。工程实现中也会结合 IMF 两个条件、最大迭代次数或改进的停止准则。</p>
+<p>因此，不同 EMD 代码产生略有不同的结果并不必然意味着哪一个写错了。常见差异来源包括：</p>
+<ul>
+<li>样条插值和端点延拓方式；</li>
+<li>平台或库对极值点的处理；</li>
+<li>IMF 判据；</li>
+<li>Sifting 停止准则。</li>
+</ul>
+<h2 id="EMD-的能力边界"><a href="#EMD-的能力边界" class="headerlink" title="EMD 的能力边界"></a>EMD 的能力边界</h2><p>EMD 的“自适应”来自数据自身的极值结构，而不是预先指定 $0\sim100\text{ Hz}$、$100\sim500\text{ Hz}$ 这样的频带。这个优点也带来了几个必须正视的问题。</p>
+<h3 id="噪声敏感与模态混叠"><a href="#噪声敏感与模态混叠" class="headerlink" title="噪声敏感与模态混叠"></a>噪声敏感与模态混叠</h3><p>高频噪声会制造大量额外极值点，从而改变 EMD 所依据的局部时间尺度。间歇出现的信号也可能使同一个物理过程分散到多个 IMF，或让一个 IMF 混入多个尺度的成分；这类现象称为<strong>模态混叠</strong>。</p>
+<p>EEMD、CEEMDAN 等方法正是为改善这类问题而提出的。</p>
+<h3 id="端点效应"><a href="#端点效应" class="headerlink" title="端点效应"></a>端点效应</h3><p>在信号两端，包络插值缺少一侧的数据支撑，端部包络可能明显偏离真实趋势。由于 Sifting 会反复迭代，端点误差还可能向内部传播。镜像延拓（mirror extension）或对称延拓是常见的缓解手段，但它们不是对所有数据都完美的通用解。</p>
+<h3 id="IMF-不保证严格正交"><a href="#IMF-不保证严格正交" class="headerlink" title="IMF 不保证严格正交"></a>IMF 不保证严格正交</h3><p>EMD 的各 IMF 一般不保证严格正交：</p>
+<p>$$<br>\langle IMF_i,IMF_j\rangle\ne0<br>$$</p>
+<p>不同 IMF 之间可能仍有能量或信息重叠。正交性指标（Orthogonality Index）可以辅助评价重叠程度，但指标小并不能单独证明某个 IMF 就具有正确的物理含义。</p>
+<h2 id="如何解读-EMD-结果"><a href="#如何解读-EMD-结果" class="headerlink" title="如何解读 EMD 结果"></a>如何解读 EMD 结果</h2><p>拿到多条 IMF 后，不应简单套用“IMF1 高频，所以删掉”的规则。高频模态可能是噪声，也可能包含冲击、泄漏、共振或目标声源等关键特征。</p>
+<p>更稳妥的流程是结合多种证据判断：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">EMD 分解</span><br><span class="line">  ↓</span><br><span class="line">各 IMF 的时域形态（瞬态、包络、冲击）</span><br><span class="line">  + 频谱与主要频带</span><br><span class="line">  + 能量占比</span><br><span class="line">  + 与原始信号或参考量的相关性</span><br><span class="line">  + 实验条件与目标先验</span><br><span class="line">  ↓</span><br><span class="line">选择目标相关的 IMF，再进行重构或特征提取</span><br></pre></td></tr></table></figure>
+
+<p>例如，第 $k$ 个 IMF 的能量占比可写为：</p>
+<p>$$<br>E_k&#x3D;\sum_n IMF_k^2[n], \qquad<br>\eta_k&#x3D;\frac{E_k}{\sum_jE_j}<br>$$</p>
+<p>能量和相关性都是有用的辅助量，但不能替代对信号来源的判断。</p>
+<h2 id="与-VMD-的初步区别"><a href="#与-VMD-的初步区别" class="headerlink" title="与 VMD 的初步区别"></a>与 VMD 的初步区别</h2><table>
+<thead>
+<tr>
+<th>EMD</th>
+<th>VMD</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>由时域局部极值驱动</td>
+<td>由变分优化与带宽约束驱动</td>
+</tr>
+<tr>
+<td>通过 Sifting 逐个提取 IMF</td>
+<td>通常同时优化多个模态</td>
+</tr>
+<tr>
+<td>不必预先指定模态数</td>
+<td>通常需要指定模态数 $K$</td>
+</tr>
+<tr>
+<td>经验成分较强</td>
+<td>数学优化框架更明确</td>
+</tr>
+<tr>
+<td>容易受端点、噪声和模态混叠影响</td>
+<td>往往能改善部分混叠问题</td>
+</tr>
+</tbody></table>
+<p>这不是简单的优劣排序。EMD 的价值在于它提供了一个非常直观的、数据驱动的局部振荡分析视角；VMD 则在这个问题上引入了更明确的优化框架。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>EMD 的主线可以压缩成：</p>
+<p>$$<br>\text{局部极值}<br>\rightarrow<br>\text{上下包络}<br>\rightarrow<br>\text{局部均值}<br>\rightarrow<br>\text{减去局部均值}<br>\rightarrow<br>\text{Sifting}<br>\rightarrow<br>\text{IMF}<br>\rightarrow<br>\text{Residual}<br>\rightarrow<br>\text{继续分解}<br>$$</p>
+<p>更准确地说，EMD 利用局部极值定义局部时间尺度，通过上下包络估计局部慢变均值，再反复减去该均值，使当前分量逐步满足局部对称振荡条件，最终按由快到慢的顺序提取 IMF。</p>
+<p>在后续学习中，请始终记住三点：</p>
+<ul>
+<li>IMF 是局部振荡分量，不是固定频率正弦波；</li>
+<li>高频 IMF 不自动等于噪声；</li>
+<li>EMD 的结果必须结合信号机理、时频特征和实验背景解释。</li>
+</ul>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">模态分解</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">EMD</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">IMF</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">信号处理</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/信号处理//" class="article-tag-list-link color5">信号处理</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2026/09/07/%E6%A8%A1%E6%80%81%E5%88%86%E8%A7%A33%EF%BC%9AEMD%20%E5%A6%82%E4%BD%95%E7%AD%9B%E5%87%BA%20IMF/" target="_blank" rel="noopener">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
   
     <article id="post-模态分解2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -2084,6 +2330,14 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">小波变换</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">IMF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">信号处理</a>
               </li>
             
             <div class="clearfix"></div>
