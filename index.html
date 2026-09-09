@@ -222,8 +222,8 @@
     <b>✦</b>
   </div>
   <div class="hero-stats" aria-label="网站摘要">
-    <div><strong>8</strong><span>篇记录</span></div>
-    <div><strong>1</strong><span>个分类</span></div>
+    <div><strong>9</strong><span>篇记录</span></div>
+    <div><strong>2</strong><span>个分类</span></div>
     <div><strong>ON</strong><span>持续更新</span></div>
   </div>
 </section>
@@ -231,9 +231,148 @@
 <section class="home-stream" id="latest-notes" aria-labelledby="latest-notes-title">
   <div class="stream-heading">
     <div><p>RECENT ENTRIES</p><h2 id="latest-notes-title">最近更新</h2></div>
-    <span>✦ 8 NOTES</span>
+    <span>✦ 9 NOTES</span>
   </div>
   
+  
+    <article id="post-C++知识总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2026/09/09/C++%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/" target="_blank">C++ 知识总结</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2026/09/09/C++%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/" class="archive-article-date">
+        <time datetime="2026-09-09T12:06:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2026-09-09</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p>这是一份 C++ 基础学习复盘，聚焦函数参数、容器边界、范围 for、std::map 与下标类型等容易出错的知识点。</p>
+<hr>
+<h2 id="函数参数"><a href="#函数参数" class="headerlink" title="函数参数"></a>函数参数</h2><p><code>int value</code> 是值传递，函数得到副本，修改不会影响原变量。</p>
+<p><code>int&amp; value</code> 是引用传递，参数是原变量的别名，修改会影响原变量。</p>
+<p><code>const T&amp;</code> 既避免复制，又禁止通过参数修改原对象，适合只读较大的对象。</p>
+<h2 id="数组和-vector-边界"><a href="#数组和-vector-边界" class="headerlink" title="数组和 vector 边界"></a>数组和 <code>vector</code> 边界</h2><p>长度为 3 的容器合法下标是 <code>0、1、2</code>。访问 <code>3</code> 属于越界，是未定义行为，不一定立即报错。</p>
+<p>遍历时使用 <code>&lt; size()</code>，不要使用 <code>&lt;= size()</code>。</p>
+<p>空容器不能访问第一个元素。使用 <code>empty()</code> 先判断。</p>
+<p><code>operator[]</code> 不检查边界；<code>at()</code> 检查边界，越界会抛出 <code>std::out_of_range</code>。</p>
+<h2 id="std-map"><a href="#std-map" class="headerlink" title="std::map"></a><code>std::map</code></h2><p><code>std::map&lt;Key, Value&gt;</code> 保存键值对，键不能重复，并按键排序。</p>
+<p><code>scores[&quot;Alice&quot;] += 5</code> 会读取 Alice 的旧值并加 5。</p>
+<p>使用 <code>operator[]</code> 访问不存在的键时，会创建该键并把值默认初始化。</p>
+<p>预测程序输出时，要逐句跟踪容器大小和每个键的最新值。</p>
+<h2 id="范围-for"><a href="#范围-for" class="headerlink" title="范围 for"></a>范围 <code>for</code></h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> value : values) &#123;</span><br><span class="line">    sum += value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>value</code> 是当前元素的副本。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">const</span> <span class="keyword">auto</span>&amp; value : values) &#123;</span><br><span class="line">    <span class="comment">// 只读，不复制对象</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>const auto&amp;</code> 适合只读较大的元素；<code>auto&amp;</code> 可以修改原元素。</p>
+<h2 id="size-与下标类型"><a href="#size-与下标类型" class="headerlink" title="size() 与下标类型"></a><code>size()</code> 与下标类型</h2><p><code>values.size()</code> 返回容器大小类型，通常是无符号类型。使用 <code>int</code> 下标与它比较可能产生 signedness 警告。</p>
+<p>优先使用范围 <code>for</code>；必须使用下标时，可以使用：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (std::<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; values.<span class="built_in">size</span>(); ++i) &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="函数参数示例"><a href="#函数参数示例" class="headerlink" title="函数参数示例"></a>函数参数示例</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">addByValue</span><span class="params">(<span class="type">int</span> value)</span> </span>&#123;</span><br><span class="line">    ++value; <span class="comment">// 只修改副本</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">addByReference</span><span class="params">(<span class="type">int</span>&amp; value)</span> </span>&#123;</span><br><span class="line">    ++value; <span class="comment">// 修改原变量</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; values)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 只读，不复制整个 vector</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="边界检查示例"><a href="#边界检查示例" class="headerlink" title="边界检查示例"></a>边界检查示例</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">std::vector&lt;<span class="type">int</span>&gt; values&#123;<span class="number">10</span>, <span class="number">20</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!values.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">    std::cout &lt;&lt; values[<span class="number">0</span>] &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    std::cout &lt;&lt; values.<span class="built_in">at</span>(<span class="number">2</span>) &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125; <span class="built_in">catch</span> (<span class="type">const</span> std::out_of_range&amp;) &#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;out of range\n&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="map-示例"><a href="#map-示例" class="headerlink" title="map 示例"></a><code>map</code> 示例</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">std::map&lt;std::string, <span class="type">int</span>&gt; scores;</span><br><span class="line">scores[<span class="string">&quot;Alice&quot;</span>] = <span class="number">90</span>;</span><br><span class="line">scores[<span class="string">&quot;Alice&quot;</span>] += <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// scores.size() == 1</span></span><br><span class="line"><span class="comment">// scores[&quot;Alice&quot;] == 95</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="返回值与空容器示例"><a href="#返回值与空容器示例" class="headerlink" title="返回值与空容器示例"></a>返回值与空容器示例</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">double</span> <span class="title">average</span><span class="params">(<span class="type">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; values)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (values.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0.0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">double</span> sum = <span class="number">0.0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> value : values) &#123;</span><br><span class="line">        sum += value;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sum / values.<span class="built_in">size</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">STL</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">vector</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">std::map</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/C-学习//" class="article-tag-list-link color2">C++ 学习</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2026/09/09/C++%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/" target="_blank" rel="noopener">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
   
     <article id="post-模态分解3：EMD 如何筛出 IMF" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -2338,6 +2477,22 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">信号处理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">STL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">vector</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">std::map</a>
               </li>
             
             <div class="clearfix"></div>
