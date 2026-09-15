@@ -222,7 +222,7 @@
     <b>✦</b>
   </div>
   <div class="hero-stats" aria-label="网站摘要">
-    <div><strong>9</strong><span>篇记录</span></div>
+    <div><strong>10</strong><span>篇记录</span></div>
     <div><strong>2</strong><span>个分类</span></div>
     <div><strong>ON</strong><span>持续更新</span></div>
   </div>
@@ -231,9 +231,169 @@
 <section class="home-stream" id="latest-notes" aria-labelledby="latest-notes-title">
   <div class="stream-heading">
     <div><p>RECENT ENTRIES</p><h2 id="latest-notes-title">最近更新</h2></div>
-    <span>✦ 9 NOTES</span>
+    <span>✦ 10 NOTES</span>
   </div>
   
+  
+    <article id="post-C++阶段总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2026/09/15/C++%E9%98%B6%E6%AE%B5%E6%80%BB%E7%BB%93/" target="_blank">C++阶段总结</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2026/09/15/C++%E9%98%B6%E6%AE%B5%E6%80%BB%E7%BB%93/" class="archive-article-date">
+        <time datetime="2026-09-15T07:53:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2026-09-15</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p>这份阶段复盘聚焦 C++ 中最容易出现所有权与生命周期问题的部分：原始指针、动态内存，以及 <code>unique_ptr</code>、<code>shared_ptr</code> 和 <code>weak_ptr</code> 的使用边界。</p>
+<hr>
+<h2 id="指针和数组参数"><a href="#指针和数组参数" class="headerlink" title="指针和数组参数"></a>指针和数组参数</h2><p>数组传入函数后，通常会退化成指向第一个元素的指针。函数不知道数组长度，所以需要额外传入 <code>count</code>。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">sumArray</span><span class="params">(<span class="type">const</span> <span class="type">int</span>* data, std::<span class="type">size_t</span> count)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (data == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (std::<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; count; ++i) &#123;</span><br><span class="line">        sum += data[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>data[i]</code> 等价于 <code>*(data + i)</code>。</p>
+<p><code>sizeof(array) / sizeof(array[0])</code> 只能在真正的数组变量上计算元素数量。数组传入函数后变成指针，不能再用这个方法得到长度。</p>
+<h2 id="nullptr-和解引用"><a href="#nullptr-和解引用" class="headerlink" title="nullptr 和解引用"></a><code>nullptr</code> 和解引用</h2><p><code>nullptr</code> 表示指针不指向任何有效对象。解引用前必须检查：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (ptr != <span class="literal">nullptr</span>) &#123;</span><br><span class="line">    *ptr = <span class="number">42</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>直接对 <code>nullptr</code> 解引用会产生未定义行为，可能崩溃。</p>
+<h2 id="stack、heap-和生命周期"><a href="#stack、heap-和生命周期" class="headerlink" title="stack、heap 和生命周期"></a>stack、heap 和生命周期</h2><p>局部变量通常位于 stack，离开作用域后自动销毁：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">example</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> value = <span class="number">42</span>;</span><br><span class="line">&#125; <span class="comment">// value 自动销毁</span></span><br></pre></td></tr></table></figure>
+
+<p><code>new</code> 创建的对象位于 heap，不会因为创建它的函数结束而自动销毁：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span>* <span class="title">createValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">int</span>(<span class="number">42</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果忘记 <code>delete</code>，会发生内存泄漏。反复泄漏可能耗尽内存。</p>
+<h2 id="unique-ptr"><a href="#unique-ptr" class="headerlink" title="unique_ptr"></a><code>unique_ptr</code></h2><p><code>std::unique_ptr&lt;int&gt;</code> 表示独占拥有一个 <code>int</code> 对象的智能指针。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> value = std::<span class="built_in">make_unique</span>&lt;<span class="type">int</span>&gt;(<span class="number">42</span>);</span><br><span class="line">std::cout &lt;&lt; *value &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>它离开作用域时会自动释放对象，不需要手动 <code>delete</code>。</p>
+<p><code>unique_ptr</code> 不能复制，只能移动：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> first = std::<span class="built_in">make_unique</span>&lt;<span class="type">int</span>&gt;(<span class="number">42</span>);</span><br><span class="line"><span class="keyword">auto</span> second = std::<span class="built_in">move</span>(first);</span><br></pre></td></tr></table></figure>
+
+<p>移动后 <code>first == nullptr</code>，<code>second</code> 获得对象的独占所有权。<code>std::move</code> 转移的是所有权，不改变对象的值。</p>
+<h2 id="函数返回-unique-ptr"><a href="#函数返回-unique-ptr" class="headerlink" title="函数返回 unique_ptr"></a>函数返回 <code>unique_ptr</code></h2><p>函数可以直接返回 <code>std::make_unique</code> 的结果：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">std::unique_ptr&lt;<span class="type">int</span>&gt; <span class="title">createValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> std::<span class="built_in">make_unique</span>&lt;<span class="type">int</span>&gt;(<span class="number">42</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调用者接收返回值后获得所有权。这里不需要手动写 <code>std::move</code>。</p>
+<h2 id="独立对象和共享对象"><a href="#独立对象和共享对象" class="headerlink" title="独立对象和共享对象"></a>独立对象和共享对象</h2><p>下面的函数创建的是一个新对象：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">std::unique_ptr&lt;<span class="type">int</span>&gt; <span class="title">cloneValue</span><span class="params">(<span class="type">const</span> <span class="type">int</span>&amp; value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> std::<span class="built_in">make_unique</span>&lt;<span class="type">int</span>&gt;(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>修改返回的对象不会影响原变量，因为两者位于不同的对象中。</p>
+<h2 id="shared-ptr"><a href="#shared-ptr" class="headerlink" title="shared_ptr"></a><code>shared_ptr</code></h2><p><code>std::shared_ptr</code> 表示共享所有权。多个 <code>shared_ptr</code> 可以指向同一个对象：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> first = std::<span class="built_in">make_shared</span>&lt;<span class="type">int</span>&gt;(<span class="number">10</span>);</span><br><span class="line"><span class="keyword">auto</span> second = first;</span><br><span class="line"></span><br><span class="line">*second = <span class="number">50</span>;</span><br><span class="line"><span class="comment">// *first == 50</span></span><br><span class="line"><span class="comment">// first.use_count() == 2</span></span><br></pre></td></tr></table></figure>
+
+<p><code>use_count()</code> 表示当前拥有者数量。最后一个 <code>shared_ptr</code> 被销毁或 <code>reset()</code> 后，对象才会释放。</p>
+<h2 id="weak-ptr"><a href="#weak-ptr" class="headerlink" title="weak_ptr"></a><code>weak_ptr</code></h2><p><code>weak_ptr</code> 只观察对象，不拥有对象，也不会增加 <code>use_count()</code>：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">std::weak_ptr&lt;<span class="type">int</span>&gt; observer = first;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">auto</span> locked = observer.<span class="built_in">lock</span>()) &#123;</span><br><span class="line">    std::cout &lt;&lt; *locked &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>访问前必须使用 <code>lock()</code>。如果对象已经销毁，<code>lock()</code> 返回空的 <code>shared_ptr</code>。也可以使用 <code>expired()</code> 判断对象是否已经销毁。</p>
+<h2 id="循环引用"><a href="#循环引用" class="headerlink" title="循环引用"></a>循环引用</h2><p>如果两个对象互相持有 <code>shared_ptr</code>：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">A ──shared_ptr──► B</span><br><span class="line">B ──shared_ptr──► A</span><br></pre></td></tr></table></figure>
+
+<p>即使外部指针销毁，引用计数也可能无法归零，造成内存泄漏。</p>
+<p>双向关系中，通常让一个方向使用 <code>weak_ptr</code>：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Parent</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Child</span> &#123;</span><br><span class="line">    std::weak_ptr&lt;Parent&gt; parent;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Parent</span> &#123;</span><br><span class="line">    std::shared_ptr&lt;Child&gt; child;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>我的正确建立关系顺序是：先创建两个对象，再建立关系。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> parent = std::<span class="built_in">make_shared</span>&lt;Parent&gt;();</span><br><span class="line"><span class="keyword">auto</span> child = std::<span class="built_in">make_shared</span>&lt;Child&gt;();</span><br><span class="line"></span><br><span class="line">parent-&gt;child = child;</span><br><span class="line">child-&gt;parent = parent;</span><br></pre></td></tr></table></figure>
+
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">指针</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">智能指针</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">内存管理</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/C-学习//" class="article-tag-list-link color2">C++ 学习</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2026/09/15/C++%E9%98%B6%E6%AE%B5%E6%80%BB%E7%BB%93/" target="_blank" rel="noopener">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
   
     <article id="post-C++知识总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -2493,6 +2653,18 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">std::map</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">指针</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">智能指针</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">内存管理</a>
               </li>
             
             <div class="clearfix"></div>
