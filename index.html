@@ -222,8 +222,8 @@
     <b>✦</b>
   </div>
   <div class="hero-stats" aria-label="网站摘要">
-    <div><strong>10</strong><span>篇记录</span></div>
-    <div><strong>2</strong><span>个分类</span></div>
+    <div><strong>11</strong><span>篇记录</span></div>
+    <div><strong>3</strong><span>个分类</span></div>
     <div><strong>ON</strong><span>持续更新</span></div>
   </div>
 </section>
@@ -231,9 +231,309 @@
 <section class="home-stream" id="latest-notes" aria-labelledby="latest-notes-title">
   <div class="stream-heading">
     <div><p>RECENT ENTRIES</p><h2 id="latest-notes-title">最近更新</h2></div>
-    <span>✦ 10 NOTES</span>
+    <span>✦ 11 NOTES</span>
   </div>
   
+  
+    <article id="post-LangChain学习笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2026/10/29/LangChain%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_blank">LangChain 学习笔记</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2026/10/29/LangChain%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="archive-article-date">
+        <time datetime="2026-10-29T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2026-10-29</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p>LangChain 的价值不在于替代模型，而在于把提示词、消息、模型调用、输出解析与历史管理组织成可复用的应用流程。</p>
+<hr>
+<h2 id="1-LangChain-的作用"><a href="#1-LangChain-的作用" class="headerlink" title="1. LangChain 的作用"></a>1. LangChain 的作用</h2><p>LangChain 是用于构建大模型应用的框架，负责组织模型调用、提示词、消息和输出处理。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">输入变量 → 提示词模板 → 模型 → 输出解析</span><br></pre></td></tr></table></figure>
+
+<p>模型负责生成回答，LangChain 负责连接和组织这些步骤。</p>
+<h2 id="2-模型客户端"><a href="#2-模型客户端" class="headerlink" title="2. 模型客户端"></a>2. 模型客户端</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain_deepseek <span class="keyword">import</span> ChatDeepSeek</span><br><span class="line"></span><br><span class="line">model = ChatDeepSeek(</span><br><span class="line">    model=<span class="string">&quot;deepseek-flash&quot;</span>,</span><br><span class="line">    max_tokens=<span class="number">300</span>,</span><br><span class="line">    timeout=<span class="number">60</span>,</span><br><span class="line">    max_retries=<span class="number">0</span>,</span><br><span class="line">    extra_body=&#123;<span class="string">&quot;thinking&quot;</span>: &#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;disabled&quot;</span>&#125;&#125;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>`model`</td>
+<td>模型名称</td>
+</tr>
+<tr>
+<td>`max_tokens`</td>
+<td>最大生成 token 数，不是字符数</td>
+</tr>
+<tr>
+<td>`timeout`</td>
+<td>请求超时配置</td>
+</tr>
+<tr>
+<td>`max_retries`</td>
+<td>自动重试次数</td>
+</tr>
+<tr>
+<td>`extra_body`</td>
+<td>传递额外请求参数</td>
+</tr>
+</tbody></table>
+<p>`ChatDeepSeek` 可以从环境变量 `DEEPSEEK_API_KEY` 读取凭证。</p>
+<p>创建客户端对象不会立即生成回答，也不会自动保存对话历史。客户端可以重复使用。</p>
+<h2 id="3-消息与角色"><a href="#3-消息与角色" class="headerlink" title="3. 消息与角色"></a>3. 消息与角色</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">messages = [</span><br><span class="line">    &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;你是一位 Python 老师。&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;什么是函数？&quot;</span>&#125;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>`system`</td>
+<td>角色设定、任务要求和回答规则</td>
+</tr>
+<tr>
+<td>`user` &#x2F; `human`</td>
+<td>用户输入</td>
+</tr>
+<tr>
+<td>`assistant` &#x2F; `ai`</td>
+<td>模型回答</td>
+</tr>
+</tbody></table>
+<p>系统消息可以引导模型，但不能保证输出始终符合要求。</p>
+<h2 id="4-模型调用与返回值"><a href="#4-模型调用与返回值" class="headerlink" title="4. 模型调用与返回值"></a>4. 模型调用与返回值</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">response = model.invoke(messages)</span><br></pre></td></tr></table></figure>
+
+<p>模型返回消息对象，可读取：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">response.content             <span class="comment"># 回答内容</span></span><br><span class="line">response.response_metadata   <span class="comment"># 响应元数据</span></span><br></pre></td></tr></table></figure>
+
+<p>消息对象与字典的访问方式不同：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">response.content</span><br><span class="line">data[<span class="string">&quot;content&quot;</span>]</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-提示词模板"><a href="#5-提示词模板" class="headerlink" title="5. 提示词模板"></a>5. 提示词模板</h2><p>`ChatPromptTemplate` 将消息角色和包含占位符的文本组成可复用模板。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain_core.prompts <span class="keyword">import</span> ChatPromptTemplate</span><br><span class="line"></span><br><span class="line">prompt = ChatPromptTemplate.from_messages([</span><br><span class="line">    (<span class="string">&quot;system&quot;</span>, <span class="string">&quot;你是一位 &#123;topic&#125; 面试官，请提出一道 &#123;level&#125; 难度的题。&quot;</span>),</span><br><span class="line">    (<span class="string">&quot;human&quot;</span>, <span class="string">&quot;&#123;question&#125;&quot;</span>),</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
+
+<p>通过变量字典填充模板：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">prompt_value = prompt.invoke(&#123;</span><br><span class="line">    <span class="string">&quot;topic&quot;</span>: <span class="string">&quot;Python&quot;</span>,</span><br><span class="line">    <span class="string">&quot;level&quot;</span>: <span class="string">&quot;入门&quot;</span>,</span><br><span class="line">    <span class="string">&quot;question&quot;</span>: <span class="string">&quot;开始面试&quot;</span>,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">messages = prompt_value.to_messages()</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>`prompt.invoke()`：填充模板，不调用模型。</li>
+<li>`model.invoke()`：调用模型。</li>
+<li>`to_messages()`：将提示词结果转换为消息列表。</li>
+</ul>
+<h2 id="6-链与-运算符"><a href="#6-链与-运算符" class="headerlink" title="6. 链与 `|` 运算符"></a>6. 链与 `|` 运算符</h2><p>`|` 将前一个组件的输出传给后一个组件。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chain = prompt | model</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">变量字典 → 提示词模板 → 模型 → 消息对象</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">response = chain.invoke(&#123;</span><br><span class="line">    <span class="string">&quot;topic&quot;</span>: <span class="string">&quot;Python&quot;</span>,</span><br><span class="line">    <span class="string">&quot;level&quot;</span>: <span class="string">&quot;入门&quot;</span>,</span><br><span class="line">    <span class="string">&quot;question&quot;</span>: <span class="string">&quot;开始面试&quot;</span>,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><strong>链的输入由第一个组件决定，最终输出由最后一个组件决定。</strong></p>
+<h2 id="7-字符串输出解析器"><a href="#7-字符串输出解析器" class="headerlink" title="7. 字符串输出解析器"></a>7. 字符串输出解析器</h2><p>`StrOutputParser` 从模型消息中提取文本。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain_core.output_parsers <span class="keyword">import</span> StrOutputParser</span><br><span class="line"></span><br><span class="line">chain = prompt | model | StrOutputParser()</span><br><span class="line">answer = chain.invoke(inputs)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">变量字典 → 提示词 → 模型消息 → 文本</span><br></pre></td></tr></table></figure>
+
+<p>结果直接作为文本使用，不再访问 `.content`。</p>
+<p>某些版本中结果的具体类型可能是 `TextAccessor`，它继承自 `str`：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">isinstance</span>(answer, <span class="built_in">str</span>)  <span class="comment"># True</span></span><br></pre></td></tr></table></figure>
+
+<p>必要时可转换为普通字符串：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">answer = <span class="built_in">str</span>(answer)</span><br></pre></td></tr></table></figure>
+
+<p>解析后的文本不包含原消息对象的响应元数据。</p>
+<h2 id="8-对话历史与占位符"><a href="#8-对话历史与占位符" class="headerlink" title="8. 对话历史与占位符"></a>8. 对话历史与占位符</h2><p>`MessagesPlaceholder` 在模板中预留一组历史消息的位置。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain_core.prompts <span class="keyword">import</span> MessagesPlaceholder</span><br><span class="line"></span><br><span class="line">prompt = ChatPromptTemplate.from_messages([</span><br><span class="line">    (<span class="string">&quot;system&quot;</span>, <span class="string">&quot;你是一位 &#123;topic&#125; 面试官。&quot;</span>),</span><br><span class="line">    MessagesPlaceholder(<span class="string">&quot;history&quot;</span>),</span><br><span class="line">    (<span class="string">&quot;human&quot;</span>, <span class="string">&quot;&#123;question&#125;&quot;</span>),</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
+
+<p>消息排列顺序：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">system → 历史消息 → 本次用户消息</span><br></pre></td></tr></table></figure>
+
+<p>调用时传入历史列表：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">inputs = &#123;</span><br><span class="line">    <span class="string">&quot;topic&quot;</span>: <span class="string">&quot;Python&quot;</span>,</span><br><span class="line">    <span class="string">&quot;history&quot;</span>: history,</span><br><span class="line">    <span class="string">&quot;question&quot;</span>: question,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>`MessagesPlaceholder` 只插入消息，不自动保存历史。</strong></p>
+<p>历史需要由程序维护：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">history.append(&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: question&#125;)</span><br><span class="line">history.append(&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;assistant&quot;</span>, <span class="string">&quot;content&quot;</span>: answer&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>如果 system 消息已经在模板中，就不需要每轮向历史重复追加它。</p>
+<h2 id="9-历史裁剪"><a href="#9-历史裁剪" class="headerlink" title="9. 历史裁剪"></a>9. 历史裁剪</h2><p>在每轮固定保存两条消息的前提下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">history = history[-<span class="number">6</span>:]</span><br></pre></td></tr></table></figure>
+
+<p>表示保留最近三轮完整问答。</p>
+<ul>
+<li>裁剪后的早期消息不会再被发送给模型。</li>
+<li>消息条数固定，不代表 token 数固定。</li>
+<li>模板中的 system 消息、本次用户输入也会占用输入 token。</li>
+<li>普通内存列表不会在程序重启后自动恢复。</li>
+</ul>
+<h2 id="10-invoke-与-stream"><a href="#10-invoke-与-stream" class="headerlink" title="10. `invoke()` 与 `stream()`"></a>10. `invoke()` 与 `stream()`</h2><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>返回方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>`invoke()`</td>
+<td>等待并一次返回完整结果</td>
+</tr>
+<tr>
+<td>`stream()`</td>
+<td>返回输出流，通过迭代逐段接收结果</td>
+</tr>
+</tbody></table>
+<p>流式输出能更早显示部分回答，但不保证整体生成速度更快。每个片段不一定对应一个字符、单词或句子。</p>
+<p>带字符串解析器的链可以直接拼接文本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">answer = <span class="string">&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> chunk <span class="keyword">in</span> chain.stream(inputs):</span><br><span class="line">    <span class="built_in">print</span>(chunk, end=<span class="string">&quot;&quot;</span>, flush=<span class="literal">True</span>)</span><br><span class="line">    answer += chunk</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>()</span><br></pre></td></tr></table></figure>
+
+<h2 id="11-流式消息合并"><a href="#11-流式消息合并" class="headerlink" title="11. 流式消息合并"></a>11. 流式消息合并</h2><p>需要保留元数据时，使用不带字符串解析器的链：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stream_chain = prompt | model</span><br></pre></td></tr></table></figure>
+
+<p>输出是消息片段对象，可以相加合并：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">full_response = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> chunk <span class="keyword">in</span> stream_chain.stream(inputs):</span><br><span class="line">    <span class="built_in">print</span>(chunk.content, end=<span class="string">&quot;&quot;</span>, flush=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> full_response <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        full_response = chunk</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        full_response = full_response + chunk</span><br></pre></td></tr></table></figure>
+
+<p>合并后可读取：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">full_response.content</span><br><span class="line">full_response.response_metadata</span><br></pre></td></tr></table></figure>
+
+<p>访问属性前应检查是否收到过片段。结束原因应在流式循环完成后读取，而不是只检查第一块。</p>
+<h2 id="12-结束原因"><a href="#12-结束原因" class="headerlink" title="12. 结束原因"></a>12. 结束原因</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reason = response.response_metadata.get(<span class="string">&quot;finish_reason&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>`stop`</td>
+<td>正常停止生成</td>
+</tr>
+<tr>
+<td>`length`</td>
+<td>达到生成长度等限制，内容可能不完整</td>
+</tr>
+<tr>
+<td>其他值或 `None`</td>
+<td>需要按具体接口语义进一步处理</td>
+</tr>
+</tbody></table>
+<p><strong>请求成功、流正常结束，不代表回答没有被截断。</strong></p>
+<p>`stop` 也不保证回答事实正确或满足全部提示要求。</p>
+<h2 id="13-流式异常与历史一致性"><a href="#13-流式异常与历史一致性" class="headerlink" title="13. 流式异常与历史一致性"></a>13. 流式异常与历史一致性</h2><p>流式异常可能在接收任意后续片段时发生，因此异常处理应覆盖整个迭代过程。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">接收并合并片段</span><br><span class="line">    ├── 中途异常 → 不保存本轮历史</span><br><span class="line">    └── 正常结束 → 检查响应和结束原因</span><br></pre></td></tr></table></figure>
+
+<p>对于纯文本问答，可以采用以下保存策略：</p>
+<ul>
+<li>收到响应且结束原因为 `stop`：保存本轮问答。</li>
+<li>`length`、接收异常或没有响应：提示问题，不保存本轮问答。</li>
+</ul>
+<p>已经显示到屏幕上的部分文本不会自动撤回，但可以避免将其作为完整回答写入历史。</p>
+<p>`try&#x2F;except&#x2F;else` 可以区分接收失败与正常完成：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="comment"># 接收并合并流式片段</span></span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> error:</span><br><span class="line">    <span class="comment"># 处理失败</span></span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="comment"># 检查结束原因，再决定是否保存历史</span></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
+<p>`Exception` 捕获范围较宽，也可能捕获编程错误；实际项目应按需要使用更具体的异常类型。</p>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">LangChain</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Python</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">LLM</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">AI 应用</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/AI-学习//" class="article-tag-list-link color1">AI 学习</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2026/10/29/LangChain%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_blank" rel="noopener">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
   
     <article id="post-C++阶段总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -2395,93 +2695,10 @@
 
 
   
-    <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
   
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2025/10/04/hello-world/" target="_blank">Hello World</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2025/10/04/hello-world/" class="archive-article-date">
-        <time datetime="2025-10-04T09:04:48.182Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-10-04</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-    
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2025/10/04/hello-world/" target="_blank" rel="noopener">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    </nav>
   
 
 </section>
@@ -2665,6 +2882,22 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">内存管理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">LangChain</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">LLM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">AI 应用</a>
               </li>
             
             <div class="clearfix"></div>
